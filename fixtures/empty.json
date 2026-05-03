@@ -1,0 +1,10 @@
+{
+  "schemaVersion": 0,
+  "network": {
+    "name": "Empty Network",
+    "description": ""
+  },
+  "vlans": {},
+  "hosts": {},
+  "credentials": {}
+}

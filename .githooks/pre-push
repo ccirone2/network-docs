@@ -1,0 +1,4 @@
+#!/bin/sh
+# network-docs pre-push hook.
+# Activate per-clone with: git config core.hooksPath .githooks
+exec python bin/verify-no-leaks.py --mode=public-app

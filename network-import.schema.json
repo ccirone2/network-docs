@@ -1,0 +1,367 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Homelab network inventory import",
+  "description": "Schema for files accepted by the Import button in network-inventory.html. The loader (normalizeData / normalizeNetwork) is intentionally permissive: missing fields are filled with defaults rather than rejected, so this schema documents the shape but does NOT use additionalProperties: false. UNKNOWN FIELDS ARE DROPPED ON IMPORT — the normalizer constructs each record from a fixed key list, so fields not enumerated in this schema (or in normalizeNetwork) are silently discarded on round-trip. External producers that add custom annotations should not expect them to survive an import → export cycle. Storage key in localStorage: homenet.inventory.v1. The top-level schemaVersion is required and must equal 0 (frozen during in-development phase); loaders refuse anything else rather than attempting to convert. KEEP IN SYNC: when network-inventory.html adds, removes, or renames a field on any record (network / vlan / host / interface / service / credential) or changes an enum constant, update this schema in the same change. Files may also be wrapped in an encrypted envelope (see EncryptedEnvelope) — the loader unwraps after a passphrase prompt and processes the inner `data` block through the same path. NOTE: $id is intentionally absent — the schema has no canonical public URL, so external tooling must reference it by local path rather than URL.",
+  "oneOf": [
+    { "$ref": "#/$defs/MultiNetworkExport" },
+    { "$ref": "#/$defs/SingleNetwork" },
+    { "$ref": "#/$defs/EncryptedEnvelope" }
+  ],
+  "$defs": {
+    "MultiNetworkExport": {
+      "type": "object",
+      "description": "Full backup shape produced by Export → 'All networks'. Importing this REPLACES all current networks (after a confirm).",
+      "required": ["schemaVersion", "networks"],
+      "properties": {
+        "schemaVersion": { "const": 0, "description": "Format version. Loaders reject anything other than 0. Frozen at 0 during in-development phase." },
+        "networks": {
+          "type": "object",
+          "description": "Map of networkId → network. networkId is a slug-style stable key.",
+          "propertyNames": { "$ref": "#/$defs/IdString" },
+          "additionalProperties": { "$ref": "#/$defs/Network" },
+          "minProperties": 1
+        },
+        "activeNetworkId": {
+          "type": "string",
+          "description": "Key into networks. If missing or unknown, the loader picks the first network."
+        }
+      }
+    },
+
+    "SingleNetwork": {
+      "description": "Single-network shape produced by Export → 'Current network only'. On import, the user is offered 'add as new network' (recommended) or 'replace current network'.",
+      "allOf": [
+        { "$ref": "#/$defs/Network" },
+        {
+          "type": "object",
+          "required": ["schemaVersion"],
+          "properties": {
+            "schemaVersion": { "const": 0, "description": "Format version. Loaders reject anything other than 0. Frozen at 0 during in-development phase." }
+          }
+        }
+      ]
+    },
+
+    "EncryptedEnvelope": {
+      "type": "object",
+      "description": "Encrypted-file wrapper. Produced either by the offline encrypt_hosts.py tool or by the in-app exporter when running in an unlocked encrypted session — both emit the same shape, so the file is symmetric on round-trip. The loader detects the envelope by the presence of top-level `kdf` and prompts for a passphrase. After unlock, `data` is processed through the same import path as a plaintext file (multi vs single sniff). Encrypted fields (currently only credential.password) appear as {iv, ct} blobs inside `data`; a partially-encrypted state — where some passwords are plaintext strings and others are blobs — is allowed and round-trips as-is, since blanks set during in-app editing stay plaintext rather than encrypting an empty string. The envelope itself is also persisted to localStorage under `homenet.inventory.envelope.v1` so the in-app session can re-unlock on reload and re-emit a matching envelope on Export. SCHEMA_VERSION inside `data.schemaVersion` is still required and must equal 0.",
+      "required": ["kdf", "cipher", "data"],
+      "properties": {
+        "kdf": {
+          "type": "object",
+          "description": "PBKDF2 parameters used to derive the AES-GCM key from the passphrase.",
+          "required": ["name", "salt", "iterations", "hash"],
+          "properties": {
+            "name":       { "const": "PBKDF2" },
+            "salt":       { "type": "string", "description": "Base64-encoded salt." },
+            "iterations": { "type": "integer", "minimum": 1 },
+            "hash":       { "type": "string", "enum": ["SHA-256"] }
+          }
+        },
+        "cipher": {
+          "type": "object",
+          "description": "Symmetric cipher used for the per-value blobs.",
+          "required": ["name"],
+          "properties": {
+            "name":   { "const": "AES-GCM" },
+            "length": { "type": "integer", "enum": [128, 192, 256] }
+          }
+        },
+        "encrypted_fields": {
+          "type": "array",
+          "description": "Documentation-only list of dotted field paths whose values are EncryptedBlob shapes inside `data`. The runtime loader does NOT consult this list — encrypted blobs are detected structurally. In v1 this is typically [\"credentials.*.password\"].",
+          "items": { "type": "string" }
+        },
+        "data": {
+          "description": "Inner inventory shape — same as the plaintext top-level (multi-network export or single-network export).",
+          "oneOf": [
+            { "$ref": "#/$defs/MultiNetworkExport" },
+            { "$ref": "#/$defs/SingleNetwork" }
+          ]
+        }
+      }
+    },
+
+    "Network": {
+      "type": "object",
+      "description": "One network's full inventory. All four child maps are optional; the loader fills in empty objects.",
+      "properties": {
+        "network": {
+          "type": "object",
+          "description": "Network-level metadata. Both fields default to empty string.",
+          "properties": {
+            "name":        { "type": "string" },
+            "description": { "type": "string" }
+          }
+        },
+        "vlans": {
+          "type": "object",
+          "description": "Map of vlanId → VLAN. vlanId is the user-facing stable key (e.g. 'VLAN10').",
+          "propertyNames": { "$ref": "#/$defs/IdString" },
+          "additionalProperties": { "$ref": "#/$defs/Vlan" }
+        },
+        "hosts": {
+          "type": "object",
+          "description": "Map of hostId → Host.",
+          "propertyNames": { "$ref": "#/$defs/IdString" },
+          "additionalProperties": { "$ref": "#/$defs/Host" }
+        },
+        "credentials": {
+          "type": "object",
+          "description": "Map of credentialId → Credential. Referenced by host.credential_ref and service.credential_ref.",
+          "propertyNames": { "$ref": "#/$defs/IdString" },
+          "additionalProperties": { "$ref": "#/$defs/Credential" }
+        }
+      }
+    },
+
+    "Vlan": {
+      "type": "object",
+      "required": ["tag"],
+      "properties": {
+        "name":             { "type": "string", "description": "Human-readable label, e.g. 'MAIN'." },
+        "tag":              { "type": "integer", "minimum": 1, "maximum": 4094, "description": "802.1Q VLAN tag. Required and used for sort order." },
+        "gateway_ip":       { "type": "string", "format": "ipv4", "description": "Gateway IPv4 address (no prefix), e.g. '192.168.10.1'. Empty when there is no gateway." },
+        "subnet_prefix":    {
+          "description": "Subnet prefix length (CIDR mask). Null/missing when there is no gateway or the prefix is unknown.",
+          "anyOf": [
+            { "type": "integer", "minimum": 0, "maximum": 32 },
+            { "type": "null" }
+          ]
+        },
+        "dhcp":             { "type": "boolean", "description": "Whether DHCP is enabled on this VLAN." },
+        "dhcp_range_start": { "type": "string", "description": "First address of the DHCP pool (inclusive), e.g. '192.168.10.100'. Validated as an IPv4 address at edit time but not on import. Empty when unspecified or when dhcp is false." },
+        "dhcp_range_end":   { "type": "string", "description": "Last address of the DHCP pool (inclusive), e.g. '192.168.10.200'. Validated as an IPv4 address at edit time but not on import. Empty when unspecified or when dhcp is false." }
+      }
+    },
+
+    "Host": {
+      "type": "object",
+      "properties": {
+        "kind":              { "$ref": "#/$defs/HostKind" },
+        "role":              { "$ref": "#/$defs/HostRole" },
+        "display_name":      { "type": "string", "description": "Human-readable name. Should NOT include parenthetical disambiguators like '(VM 100 on bockscar)' — those are composed at render time from vm_id + hosted_on." },
+        "hostname":          { "type": "string" },
+        "aliases":           { "type": "array", "items": { "type": "string", "pattern": "^[^:]*$", "description": "Alternate hostnames only — no colons. Use identifiers[] for non-hostname IDs." } },
+        "identifiers":       { "type": "array", "items": { "$ref": "#/$defs/Identifier" }, "description": "Free-floating identifiers that don't belong to an interface (Bluetooth MACs, serial numbers, IMEIs, ...)." },
+        "hosted_on":         { "type": "string", "description": "hostId of the parent host (typically used when kind = virtual or container)." },
+        "vm_id":             { "type": "string", "description": "Hypervisor-side VM/instance identifier (e.g. Proxmox VMID '100'). Stored as a string because the values in use are arbitrary tokens. Most meaningful when kind = 'virtual'; ignored otherwise." },
+        "software":          { "$ref": "#/$defs/Software" },
+        "manufacturer":      { "type": "string", "description": "Hardware vendor (e.g. 'Dell', 'Protectli', 'Google'). Combined with model at render time." },
+        "model":             { "type": "string", "description": "Product model name only — vendor lives in 'manufacturer'." },
+        "hardware_revision": { "type": "string", "description": "Optional revision/spin identifier (e.g. 'Rev A2', 'Backplate-5.26'). Stored only; not currently rendered." },
+        "management_vlan":   { "type": "string", "description": "vlanId reference. Not enforced — dangling refs are tolerated." },
+        "management_ip":     { "type": "string", "format": "ipv4" },
+        "credential_ref":    { "type": "string", "description": "credentialId reference. Not enforced — dangling refs are tolerated." },
+        "interfaces":        { "type": "array", "items": { "$ref": "#/$defs/Interface" } },
+        "services":          { "type": "array", "items": { "$ref": "#/$defs/Service" } },
+        "links":             { "type": "array", "items": { "$ref": "#/$defs/Link" }, "description": "External URLs associated with this host (vendor cloud, dashboard, documentation). Distinct from service.url, which points at a service listening on the host itself." },
+        "peripherals":       { "type": "array", "items": { "$ref": "#/$defs/Peripheral" }, "description": "Physical peripherals attached to or passed through to this host (USB sticks, PCIe cards). Distinct from interfaces, which model network connectivity." }
+      }
+    },
+
+    "Software": {
+      "type": "object",
+      "description": "Structured software/firmware descriptor. The renderer composes a display string roughly as 'name (edition, version, kernel ...)'. For switches/APs use 'name' for the firmware family (e.g. 'GS308E firmware') and 'version' for the build number; software.name being empty hides the chip entirely.",
+      "properties": {
+        "name":    { "type": "string", "description": "Primary name (e.g. 'Ubuntu', 'pfSense', 'GS308E firmware')." },
+        "version": { "type": "string", "description": "Version or build identifier (e.g. '24.04', 'V1.0.1.9')." },
+        "kernel":  { "type": "string", "description": "Kernel version where applicable (e.g. '6.1.21-v8+'). Empty for firmware/appliance-style entries." },
+        "edition": { "type": "string", "description": "Edition / spin / base distro (e.g. 'Community Edition', 'Debian 11 bullseye')." },
+        "notes":   { "type": "string" }
+      }
+    },
+
+    "Interface": {
+      "type": "object",
+      "properties": {
+        "name":          { "type": "string" },
+        "type":          { "$ref": "#/$defs/InterfaceType" },
+        "mode":          { "$ref": "#/$defs/InterfaceMode" },
+        "mac":           { "type": "string", "pattern": "^$|^[0-9a-fA-F]{2}(:[0-9a-fA-F]{2}){5}$", "description": "MAC address of this interface in colon-separated hex (e.g. 'aa:bb:cc:dd:ee:ff'). Empty string is allowed and means 'unset'. The loader does not enforce the pattern, but the schema rejects malformed non-empty values for external validators." },
+        "parent":        { "type": "string", "description": "Name of the parent interface (used for virtual/sub-interfaces)." },
+        "connected_to":  { "$ref": "#/$defs/ConnectedTo" },
+        "access_vlan":   { "type": "string", "description": "vlanId for access mode. Empty when mode = trunk." },
+        "native_vlan":   { "type": "string", "description": "vlanId for the native (untagged / PVID) VLAN on a trunk. Empty when mode = access, or when the trunk has no useful native VLAN." },
+        "allowed_vlans": { "type": "array", "items": { "type": "string" }, "description": "vlanId list for trunk mode. Empty when mode = access." },
+        "ip_addresses":  { "type": "array", "items": { "$ref": "#/$defs/IpAddress" }, "description": "List of IPv4 addresses bound to this interface, each as { address, prefix }." }
+      }
+    },
+
+    "IpAddress": {
+      "type": "object",
+      "description": "An IPv4 address with optional prefix length. Form input still accepts the full 'a.b.c.d/m' string for ergonomics; it is parsed into { address, prefix } on save.",
+      "properties": {
+        "address": { "type": "string", "format": "ipv4" },
+        "prefix":  {
+          "anyOf": [
+            { "type": "integer", "minimum": 0, "maximum": 32 },
+            { "type": "null" }
+          ]
+        }
+      }
+    },
+
+    "ConnectedTo": {
+      "type": "object",
+      "description": "Structured pointer to the remote endpoint of the cable/link. All sub-fields optional; missing or empty host_id means 'not connected'. via_bridge names a Linux bridge, OVS bridge, or virtual switch (e.g. Proxmox 'vmbr0'); via_tag is the 802.1Q tag the link delivers (1–4094) when relevant.",
+      "properties": {
+        "host_id":    { "type": "string", "description": "Remote hostId. Not enforced — dangling refs are tolerated." },
+        "interface":  { "type": "string", "description": "Remote interface name (must match a name on the remote host's interfaces)." },
+        "via_bridge": { "type": "string", "description": "Bridge or virtual switch carrying the link." },
+        "via_tag":    {
+          "description": "VLAN tag the link delivers, when relevant. Null/missing if not applicable.",
+          "anyOf": [
+            { "type": "integer", "minimum": 1, "maximum": 4094 },
+            { "type": "null" }
+          ]
+        }
+      }
+    },
+
+    "Service": {
+      "type": "object",
+      "required": ["id"],
+      "properties": {
+        "id":             { "$ref": "#/$defs/IdString", "description": "Stable per-host identifier for the service. Generated by slugify(name) with collision suffix on import; readonly in the edit form. Allows other records (e.g. credentials) to refer to a service even when its name changes." },
+        "name":           { "type": "string" },
+        "display_name":   { "type": "string" },
+        "category":       { "$ref": "#/$defs/ServiceCategory" },
+        "protocol":       { "$ref": "#/$defs/ServiceProtocol" },
+        "listen_ip":      { "type": "string", "format": "ipv4" },
+        "port":           {
+          "description": "Port number. Stored as either a number or a string (the form input is text). Empty string = unspecified.",
+          "anyOf": [
+            { "type": "integer", "minimum": 0, "maximum": 65535 },
+            { "type": "string" }
+          ]
+        },
+        "url":            { "type": "string" },
+        "credential_ref": { "type": "string" }
+      }
+    },
+
+    "Link": {
+      "type": "object",
+      "description": "A labeled external URL on a host. Use for vendor portals, cloud dashboards, or doc links — anything reachable from a browser that isn't a service running on the host. The label is what the UI renders; the URL is opened on click.",
+      "properties": {
+        "label": { "type": "string", "description": "Human-readable name for the link (e.g. 'Nest cloud', 'Vendor docs')." },
+        "url":   { "type": "string", "description": "Full URL including scheme. Not validated on import." }
+      }
+    },
+
+    "Peripheral": {
+      "type": "object",
+      "description": "A physical peripheral attached to or passed through to this host. Slot is the host-side index; usb_vid_pid is the USB vendor:product ID; description is free-form (vendor / product / role).",
+      "properties": {
+        "slot":        { "type": "string", "description": "Bare slot identifier (e.g. '0', '1', '2'). Do NOT include the kind prefix — that's redundant with `kind`." },
+        "usb_vid_pid": { "type": "string", "pattern": "^[0-9a-fA-F]{4}:[0-9a-fA-F]{4}$", "description": "USB vendor:product ID in lsusb format (e.g. '1d6b:0002'). Only meaningful when `kind` is `usb`." },
+        "description": { "type": "string", "description": "Human-readable description (vendor, model, role)." },
+        "kind":        { "$ref": "#/$defs/PeripheralKind" }
+      }
+    },
+
+    "Identifier": {
+      "type": "object",
+      "description": "A free-floating identifier on a host that doesn't belong to a specific interface — e.g. a Bluetooth MAC, device serial, IMEI. Renders as '${label || kind}: ${value}'.",
+      "required": ["kind", "value"],
+      "properties": {
+        "kind":  { "$ref": "#/$defs/IdentifierKind" },
+        "value": { "type": "string", "description": "The identifier value (e.g. a MAC address, serial number, IMEI)." },
+        "label": { "type": "string", "description": "Optional human-readable label shown instead of kind in the chip (e.g. 'bluetooth')." }
+      }
+    },
+
+    "Credential": {
+      "type": "object",
+      "description": "Plaintext password storage is supported but discouraged; external_ref is the intended field for pointing at an external vault entry. It carries a provider name (e.g. 'Bitwarden', '1Password') and a provider-scoped id (vault item id, path, etc.) — rendered as 'provider: id'. The reverse linkage to hosts/services is NOT stored on the credential — it is derived from host.credential_ref / service.credential_ref. The credential edit modal exposes that reverse view for convenience and writes back to the host/service side on save.",
+      "properties": {
+        "type":         { "$ref": "#/$defs/CredentialType" },
+        "username":     { "type": "string" },
+        "password":     {
+          "description": "Plaintext password OR per-value encrypted blob. When the file is loaded from an encrypted envelope, this field carries the {iv, ct} shape and is decrypted on demand. When the file is plaintext, OR the field has been re-saved in a plaintext session, OR an empty password was set in an encrypted session (the empty string is not a secret — never encrypted), this is a plain string. When a non-empty password is created or edited in an unlocked encrypted session, the in-app save handler re-encrypts it with a fresh IV before assigning, so the field flips back to the {iv, ct} shape. The loader accepts either; unknown shapes collapse to empty string. Mixed states inside one credentials map (some entries plaintext, some blobs) are explicitly supported and round-trip through Import/Export.",
+          "oneOf": [
+            { "type": "string" },
+            { "$ref": "#/$defs/EncryptedBlob" }
+          ]
+        },
+        "external_ref": {
+          "type": "object",
+          "description": "Pointer to an external secret store. Both fields optional; provider is the vault/manager name, id is the provider-scoped identifier (e.g. Bitwarden item id, vault path). Display format is '${provider}: ${id}' when both are present.",
+          "properties": {
+            "provider": { "type": "string" },
+            "id":       { "type": "string" }
+          }
+        },
+        "notes":        { "type": "string" }
+      }
+    },
+
+    "EncryptedBlob": {
+      "type": "object",
+      "description": "Per-value encrypted secret. Two base64-encoded fields: iv (AES-GCM nonce) and ct (ciphertext including AES-GCM auth tag). Produced by the offline encrypt_hosts.py tool OR by the in-app save handler (Crypto.encryptField) when a credential is created/edited in an unlocked encrypted session; the loader detects it structurally (object with exactly these two string keys). Plaintext stays as a plain string in the same field — the field accepts either shape. Every encryption call uses a fresh 12-byte random IV; AES-GCM nonce reuse with the same key is catastrophic, so producers MUST NOT reuse IVs.",
+      "required": ["iv", "ct"],
+      "properties": {
+        "iv": { "type": "string", "description": "Base64-encoded AES-GCM IV (nonce)." },
+        "ct": { "type": "string", "description": "Base64-encoded AES-GCM ciphertext + auth tag." }
+      }
+    },
+
+    "IdString": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[a-zA-Z0-9][a-zA-Z0-9_-]*$",
+      "description": "User-facing stable key. Generated by slugify/uniqueId helpers; readonly once created. Must start with an alphanumeric and contain only alphanumerics, hyphens, and underscores. Mixed case is allowed because legacy VLAN keys (e.g. 'VLAN10') use uppercase."
+    },
+
+    "HostKind": {
+      "type": "string",
+      "enum": ["physical", "virtual", "container", "other"],
+      "description": "HOST_KINDS in network-inventory.html. Default on import: 'physical'."
+    },
+    "HostRole": {
+      "type": "string",
+      "enum": [
+        "router", "switch", "access_point", "hypervisor",
+        "server", "workstation", "iot", "printer", "storage",
+        "monitor", "other"
+      ],
+      "description": "HOST_ROLES in network-inventory.html. Default on import: 'other'."
+    },
+    "InterfaceType": {
+      "type": "string",
+      "enum": ["ethernet", "virtual", "wifi", "bluetooth", "fiber", "tunnel", "other"],
+      "description": "INTERFACE_TYPES in network-inventory.html. Default on import: 'ethernet'."
+    },
+    "InterfaceMode": {
+      "type": "string",
+      "enum": ["access", "trunk", "untagged"],
+      "description": "INTERFACE_MODES in network-inventory.html. Default on import: 'access'."
+    },
+    "ServiceCategory": {
+      "type": "string",
+      "enum": ["management", "application", "infrastructure", "other"],
+      "description": "SERVICE_CATEGORIES in network-inventory.html. Default on import: 'application'. Drives the Services tab chip filter."
+    },
+    "ServiceProtocol": {
+      "type": "string",
+      "enum": ["http", "https", "ssh", "tcp", "udp", "smb", "rdp", "snmp", "mqtt", "other"],
+      "description": "PROTOCOLS in network-inventory.html. Default on import: 'https'."
+    },
+    "CredentialType": {
+      "type": "string",
+      "enum": ["shell", "web", "api", "console", "snmp", "database", "other"],
+      "description": "CREDENTIAL_TYPES in network-inventory.html. Indicates where the credential is used: shell/SSH, web UI, API, console (serial/IPMI), SNMP, database, or other. Default on import: 'shell'."
+    },
+    "PeripheralKind": {
+      "type": "string",
+      "enum": ["usb", "pci", "other"],
+      "description": "PERIPHERAL_KINDS in network-inventory.html. Default on import: 'usb'."
+    },
+    "IdentifierKind": {
+      "type": "string",
+      "enum": ["mac", "serial", "imei", "other"],
+      "description": "IDENTIFIER_KINDS in network-inventory.html. Default on import: 'other'."
+    }
+  }
+}

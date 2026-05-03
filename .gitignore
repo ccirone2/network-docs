@@ -1,0 +1,7 @@
+evidence/
+mockups/
+network-import.json
+network-import-encrypted.json
+.mypy_cache/
+__pycache__/
+*.pyc
