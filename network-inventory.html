@@ -1365,6 +1365,18 @@
         <div class="popover" id="net-popover" role="menu" hidden></div>
       </div>
       <div class="topbar-actions">
+        <button class="btn ghost" id="btn-open" title="Open inventory file" hidden>
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+          <span class="lbl">Open…</span>
+        </button>
+        <button class="btn ghost" id="btn-save" title="Open a file via Open… to enable in-place save" hidden disabled>
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+          <span class="lbl">Save</span>
+        </button>
+        <button class="btn ghost" id="btn-save-as" title="Save inventory to a chosen file" hidden>
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/><circle cx="18" cy="18" r="2"/></svg>
+          <span class="lbl">Save As…</span>
+        </button>
         <button class="btn ghost" id="btn-import" title="Import JSON">
           <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
           <span class="lbl">Import</span>
@@ -7321,9 +7333,104 @@ function openNetworkForm() {
   });
 }
 
-function downloadJson(obj, filename) {
-  const json = JSON.stringify(obj, null, 2);
-  const blob = new Blob([json], { type: "application/json" });
+const FSA_SUPPORTED = typeof window !== "undefined"
+  && typeof window.showOpenFilePicker === "function"
+  && typeof window.showSaveFilePicker === "function";
+
+let currentFileHandle = null;
+let currentFileScope = null;
+
+function updateSaveButton() {
+  const btn = document.getElementById("btn-save");
+  if (!btn) return;
+  btn.disabled = currentFileHandle == null;
+  btn.title = currentFileHandle
+    ? `Save to ${currentFileHandle.name}`
+    : "Open a file via Open… to enable in-place save";
+}
+
+async function ensureWritePermission(handle) {
+  let perm = await handle.queryPermission({ mode: "readwrite" });
+  if (perm === "granted") return true;
+  perm = await handle.requestPermission({ mode: "readwrite" });
+  return perm === "granted";
+}
+
+async function openFromFSA() {
+  try {
+    const [handle] = await window.showOpenFilePicker({
+      types: [{ description: "Inventory JSON", accept: { "application/json": [".json"] } }],
+      excludeAcceptAllOption: false,
+      multiple: false
+    });
+    const file = await handle.getFile();
+    const text = await file.text();
+    const parsed = JSON.parse(text);
+    processImportedJson(parsed, (scope) => {
+      currentFileHandle = handle;
+      currentFileScope = scope;
+      updateSaveButton();
+      toast(`Opened ${handle.name}`, "success");
+    });
+  } catch (err) {
+    if (err && err.name === "AbortError") return;
+    toast("Open failed: " + (err && err.message ? err.message : err), "error");
+  }
+}
+
+async function saveToFSA() {
+  if (!currentFileHandle) {
+    toast("No file open. Use Open… or Save As… first.", "error");
+    return;
+  }
+  let payload;
+  try {
+    payload = buildExportPayload(currentFileScope);
+  } catch (err) {
+    toast(err.message, "error");
+    return;
+  }
+  try {
+    const ok = await ensureWritePermission(currentFileHandle);
+    if (!ok) {
+      toast("Write permission denied — falling back to download", "info");
+      downloadJsonString(payload.json, payload.filename);
+      return;
+    }
+    const writable = await currentFileHandle.createWritable();
+    await writable.write(payload.json);
+    await writable.close();
+    toast(`Saved to ${currentFileHandle.name}`, "success");
+  } catch (err) {
+    toast("Save failed: " + (err && err.message ? err.message : err), "error");
+  }
+}
+
+async function saveAsToFSA() {
+  let suggested;
+  try {
+    suggested = buildExportPayload(currentFileScope || data.activeNetworkId).filename;
+  } catch (err) {
+    toast(err.message, "error");
+    return;
+  }
+  try {
+    const handle = await window.showSaveFilePicker({
+      suggestedName: currentFileHandle?.name || suggested,
+      types: [{ description: "Inventory JSON", accept: { "application/json": [".json"] } }]
+    });
+    currentFileHandle = handle;
+    if (!currentFileScope) currentFileScope = data.activeNetworkId;
+    updateSaveButton();
+    await saveToFSA();
+  } catch (err) {
+    if (err && err.name === "AbortError") return;
+    toast("Save As failed: " + (err && err.message ? err.message : err), "error");
+  }
+}
+
+function downloadJsonString(jsonString, filename) {
+  const blob = new Blob([jsonString], { type: "application/json" });
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;
@@ -7338,39 +7445,47 @@ function tsStamp() {
   return new Date().toISOString().replace(/[:.]/g, "-").slice(0, 19);
 }
 
-function exportAll() {
-  if (Crypto.isEncryptedSession()) {
-    const env = readEnvelopeFromStorage();
-    if (!env) { toast("Envelope metadata missing — re-import the encrypted file before exporting.", "error"); return; }
-    downloadJson({
-      kdf: env.kdf,
-      cipher: env.cipher,
-      encrypted_fields: env.encrypted_fields,
-      data
-    }, `network-inventory-all-${tsStamp()}.json`);
-    toast("Exported all networks (encrypted)", "success");
-    return;
+function buildExportPayload(scope) {
+  const isEncrypted = Crypto.isEncryptedSession();
+  let env = null;
+  if (isEncrypted) {
+    env = readEnvelopeFromStorage();
+    if (!env) throw new Error("Envelope metadata missing — re-import the encrypted file before exporting.");
   }
-  downloadJson(data, `network-inventory-all-${tsStamp()}.json`);
-  toast("Exported all networks", "success");
+  let inner, baseName;
+  if (scope === "all") {
+    inner = data;
+    baseName = `network-inventory-all-${tsStamp()}`;
+  } else {
+    const net = data.networks[scope];
+    if (!net) throw new Error(`Network '${scope}' not in current data; use Save As… to choose a different target.`);
+    inner = { schemaVersion: SCHEMA_VERSION, ...net };
+    baseName = `${slugify(net.network.name) || "network"}-${tsStamp()}`;
+  }
+  const payload = isEncrypted
+    ? { kdf: env.kdf, cipher: env.cipher, encrypted_fields: env.encrypted_fields, data: inner }
+    : inner;
+  return { filename: `${baseName}.json`, json: JSON.stringify(payload, null, 2), encrypted: isEncrypted };
+}
+
+function exportAll() {
+  try {
+    const { json, filename, encrypted } = buildExportPayload("all");
+    downloadJsonString(json, filename);
+    toast(encrypted ? "Exported all networks (encrypted)" : "Exported all networks", "success");
+  } catch (err) {
+    toast(err.message, "error");
+  }
 }
 
 function exportCurrent() {
-  const slug = slugify(state.network.name) || "network";
-  if (Crypto.isEncryptedSession()) {
-    const env = readEnvelopeFromStorage();
-    if (!env) { toast("Envelope metadata missing — re-import the encrypted file before exporting.", "error"); return; }
-    downloadJson({
-      kdf: env.kdf,
-      cipher: env.cipher,
-      encrypted_fields: env.encrypted_fields,
-      data: { schemaVersion: SCHEMA_VERSION, ...state }
-    }, `${slug}-${tsStamp()}.json`);
-    toast("Exported current network (encrypted)", "success");
-    return;
+  try {
+    const { json, filename, encrypted } = buildExportPayload(data.activeNetworkId);
+    downloadJsonString(json, filename);
+    toast(encrypted ? "Exported current network (encrypted)" : "Exported current network", "success");
+  } catch (err) {
+    toast(err.message, "error");
   }
-  downloadJson({ schemaVersion: SCHEMA_VERSION, ...state }, `${slug}-${tsStamp()}.json`);
-  toast("Exported current network", "success");
 }
 
 function openExportChooser() {
@@ -7435,7 +7550,20 @@ $("#btn-lock").addEventListener("click", () => {
 
 $("#btn-import").addEventListener("click", () => $("#file-import").click());
 
-function continueImportFromParsed(parsed) {
+if (FSA_SUPPORTED) {
+  const btnOpen = $("#btn-open");
+  const btnSave = $("#btn-save");
+  const btnSaveAs = $("#btn-save-as");
+  btnOpen.hidden = false;
+  btnSave.hidden = false;
+  btnSaveAs.hidden = false;
+  btnOpen.addEventListener("click", openFromFSA);
+  btnSave.addEventListener("click", saveToFSA);
+  btnSaveAs.addEventListener("click", saveAsToFSA);
+  updateSaveButton();
+}
+
+function continueImportFromParsed(parsed, onCommitted) {
   if (!parsed || typeof parsed !== "object") throw new Error("Top-level JSON must be an object");
   if (parsed.schemaVersion !== SCHEMA_VERSION) throw new Error("Unsupported schemaVersion — expected " + SCHEMA_VERSION);
   const networksLooksLikeMap = parsed.networks && typeof parsed.networks === "object" && !Array.isArray(parsed.networks);
@@ -7463,11 +7591,49 @@ function continueImportFromParsed(parsed) {
         switchTab("dashboard");
         toast(`Imported ${importedCount} network(s)`, "success");
         reportDanglingRefs(validateAllNetworks(data));
+        if (onCommitted) onCommitted("all");
       }
     });
   } else {
-    openImportSingleChooser(parsed);
+    openImportSingleChooser(parsed, onCommitted);
   }
+}
+
+function processImportedJson(parsed, onCommitted) {
+  if (parsed && typeof parsed === "object"
+      && parsed.kdf && parsed.cipher && parsed.data) {
+    lastKdf = parsed.kdf;
+    openPassphraseModal({
+      onUnlock: async (pp) => {
+        try {
+          await Crypto.unlock(pp, parsed.kdf);
+          const probe = findFirstBlob(parsed.data);
+          if (probe) {
+            await Crypto.decryptField(probe.blob, "__probe__");
+            Crypto.clearCache("__probe__");
+          }
+          saveEnvelope({
+            kdf: parsed.kdf,
+            cipher: parsed.cipher,
+            encrypted_fields: parsed.encrypted_fields
+          });
+          try {
+            continueImportFromParsed(parsed.data, onCommitted);
+          } catch (err) {
+            toast("Import failed: " + err.message, "error");
+          }
+          return true;
+        } catch {
+          Crypto.lock();
+          return "Incorrect passphrase";
+        }
+      },
+      onCancel: () => {  }
+    });
+    return;
+  }
+  clearEnvelope();
+  continueImportFromParsed(parsed, onCommitted);
 }
 
 $("#file-import").addEventListener("change", async (e) => {
@@ -7476,40 +7642,11 @@ $("#file-import").addEventListener("change", async (e) => {
   try {
     const text = await file.text();
     const parsed = JSON.parse(text);
-    if (parsed && typeof parsed === "object"
-        && parsed.kdf && parsed.cipher && parsed.data) {
-      lastKdf = parsed.kdf;
-      openPassphraseModal({
-        onUnlock: async (pp) => {
-          try {
-            await Crypto.unlock(pp, parsed.kdf);
-            const probe = findFirstBlob(parsed.data);
-            if (probe) {
-              await Crypto.decryptField(probe.blob, "__probe__");
-              Crypto.clearCache("__probe__");
-            }
-            saveEnvelope({
-              kdf: parsed.kdf,
-              cipher: parsed.cipher,
-              encrypted_fields: parsed.encrypted_fields
-            });
-            try {
-              continueImportFromParsed(parsed.data);
-            } catch (err) {
-              toast("Import failed: " + err.message, "error");
-            }
-            return true;
-          } catch {
-            Crypto.lock();
-            return "Incorrect passphrase";
-          }
-        },
-        onCancel: () => {  }
-      });
-      return;
-    }
-    clearEnvelope();
-    continueImportFromParsed(parsed);
+    processImportedJson(parsed, () => {
+      currentFileHandle = null;
+      currentFileScope = null;
+      updateSaveButton();
+    });
   } catch (err) {
     toast("Import failed: " + err.message, "error");
   } finally {
@@ -7517,7 +7654,7 @@ $("#file-import").addEventListener("change", async (e) => {
   }
 });
 
-function openImportSingleChooser(parsed) {
+function openImportSingleChooser(parsed, onCommitted) {
   const incoming = normalizeNetwork(parsed);
   const incomingName = incoming.network.name || "Imported network";
   const body = document.createElement("div");
@@ -7555,6 +7692,7 @@ function openImportSingleChooser(parsed) {
     switchTab("dashboard");
     toast(`Imported '${incomingName}' as new network`, "success");
     reportDanglingRefs(validateRefs(incoming).map(r => ({ network: id, ...r })));
+    if (onCommitted) onCommitted(id);
   });
   opts.appendChild(asNew);
 
@@ -7585,6 +7723,7 @@ function openImportSingleChooser(parsed) {
         render();
         toast(`Replaced with '${incomingName}'`, "success");
         reportDanglingRefs(validateRefs(incoming).map(r => ({ network: data.activeNetworkId, ...r })));
+        if (onCommitted) onCommitted(data.activeNetworkId);
       }
     });
   });
