@@ -1465,13 +1465,13 @@
 {
   "schemaVersion": 0,
   "networks": {
-    "homelab": {
+    "n_a01": {
       "network": {
         "name": "Homelab",
         "description": "Fully-populated fixture exercising every record type and field."
       },
       "vlans": {
-        "VLAN10": {
+        "v_a01": {
           "name": "LAN",
           "tag": 10,
           "gateway_ip": "192.168.10.1",
@@ -1480,7 +1480,7 @@
           "dhcp_range_start": "192.168.10.100",
           "dhcp_range_end": "192.168.10.200"
         },
-        "VLAN20": {
+        "v_a02": {
           "name": "GUEST",
           "tag": 20,
           "gateway_ip": "192.168.20.1",
@@ -1489,7 +1489,7 @@
           "dhcp_range_start": "192.168.20.100",
           "dhcp_range_end": "192.168.20.200"
         },
-        "VLAN30": {
+        "v_a03": {
           "name": "IOT",
           "tag": 30,
           "gateway_ip": "192.168.30.1",
@@ -1498,7 +1498,7 @@
           "dhcp_range_start": "192.168.30.50",
           "dhcp_range_end": "192.168.30.250"
         },
-        "VLAN100": {
+        "v_a04": {
           "name": "MGMT",
           "tag": 100,
           "gateway_ip": "192.168.100.1",
@@ -1509,14 +1509,21 @@
         }
       },
       "hosts": {
-        "router_01": {
+        "h_a01": {
           "kind": "physical",
           "role": "router",
           "display_name": "Router",
           "hostname": "router-01",
-          "aliases": ["gateway", "edge-router"],
+          "aliases": [
+            "gateway",
+            "edge-router"
+          ],
           "identifiers": [
-            { "kind": "serial", "value": "RTR-SN-12345", "label": "chassis serial" }
+            {
+              "kind": "serial",
+              "value": "RTR-SN-12345",
+              "label": "chassis serial"
+            }
           ],
           "hosted_on": "",
           "vm_id": "",
@@ -1530,9 +1537,9 @@
           "manufacturer": "Protectli",
           "model": "FW6B",
           "hardware_revision": "Rev A2",
-          "management_vlan": "VLAN100",
+          "management_vlan": "v_a04",
           "management_ip": "192.168.100.1",
-          "credential_ref": "cred_router_01",
+          "credential_ref": "c_a01",
           "interfaces": [
             {
               "name": "wan",
@@ -1540,11 +1547,21 @@
               "mode": "access",
               "mac": "aa:bb:cc:00:00:01",
               "parent": "",
-              "connected_to": { "host_id": "", "interface": "", "via_bridge": "", "via_tag": null },
+              "connected_to": {
+                "host_id": "",
+                "interface": "",
+                "via_bridge": "",
+                "via_tag": null
+              },
               "access_vlan": "",
               "native_vlan": "",
               "allowed_vlans": [],
-              "ip_addresses": [{ "address": "203.0.113.5", "prefix": 30 }]
+              "ip_addresses": [
+                {
+                  "address": "203.0.113.5",
+                  "prefix": 30
+                }
+              ]
             },
             {
               "name": "lan_trunk",
@@ -1552,15 +1569,37 @@
               "mode": "trunk",
               "mac": "aa:bb:cc:00:00:02",
               "parent": "",
-              "connected_to": { "host_id": "switch_01", "interface": "port_01", "via_bridge": "", "via_tag": null },
+              "connected_to": {
+                "host_id": "h_a02",
+                "interface": "port_01",
+                "via_bridge": "",
+                "via_tag": null
+              },
               "access_vlan": "",
-              "native_vlan": "VLAN10",
-              "allowed_vlans": ["VLAN10", "VLAN20", "VLAN30", "VLAN100"],
+              "native_vlan": "v_a01",
+              "allowed_vlans": [
+                "v_a01",
+                "v_a02",
+                "v_a03",
+                "v_a04"
+              ],
               "ip_addresses": [
-                { "address": "192.168.10.1", "prefix": 24 },
-                { "address": "192.168.20.1", "prefix": 24 },
-                { "address": "192.168.30.1", "prefix": 24 },
-                { "address": "192.168.100.1", "prefix": 24 }
+                {
+                  "address": "192.168.10.1",
+                  "prefix": 24
+                },
+                {
+                  "address": "192.168.20.1",
+                  "prefix": 24
+                },
+                {
+                  "address": "192.168.30.1",
+                  "prefix": 24
+                },
+                {
+                  "address": "192.168.100.1",
+                  "prefix": 24
+                }
               ]
             },
             {
@@ -1569,16 +1608,26 @@
               "mode": "access",
               "mac": "",
               "parent": "",
-              "connected_to": { "host_id": "", "interface": "", "via_bridge": "", "via_tag": null },
+              "connected_to": {
+                "host_id": "",
+                "interface": "",
+                "via_bridge": "",
+                "via_tag": null
+              },
               "access_vlan": "",
               "native_vlan": "",
               "allowed_vlans": [],
-              "ip_addresses": [{ "address": "10.7.0.1", "prefix": 24 }]
+              "ip_addresses": [
+                {
+                  "address": "10.7.0.1",
+                  "prefix": 24
+                }
+              ]
             }
           ],
           "services": [
             {
-              "id": "web_admin",
+              "id": "s_a01",
               "name": "web_admin",
               "display_name": "Router Admin UI",
               "category": "management",
@@ -1586,10 +1635,10 @@
               "listen_ip": "192.168.100.1",
               "port": 443,
               "url": "https://192.168.100.1/",
-              "credential_ref": "cred_router_01"
+              "credential_ref": "c_a01"
             },
             {
-              "id": "ssh",
+              "id": "s_a02",
               "name": "ssh",
               "display_name": "SSH",
               "category": "management",
@@ -1597,15 +1646,18 @@
               "listen_ip": "192.168.100.1",
               "port": 22,
               "url": "",
-              "credential_ref": "cred_router_shell"
+              "credential_ref": "c_a02"
             }
           ],
           "links": [
-            { "label": "Vendor docs", "url": "https://protectli.com/" }
+            {
+              "label": "Vendor docs",
+              "url": "https://protectli.com/"
+            }
           ],
           "peripherals": []
         },
-        "switch_01": {
+        "h_a02": {
           "kind": "physical",
           "role": "switch",
           "display_name": "Core Switch",
@@ -1624,9 +1676,9 @@
           "manufacturer": "Netgear",
           "model": "GS308E",
           "hardware_revision": "",
-          "management_vlan": "VLAN100",
+          "management_vlan": "v_a04",
           "management_ip": "192.168.100.2",
-          "credential_ref": "cred_switch_01",
+          "credential_ref": "c_a03",
           "interfaces": [
             {
               "name": "port_01",
@@ -1634,10 +1686,20 @@
               "mode": "trunk",
               "mac": "",
               "parent": "",
-              "connected_to": { "host_id": "router_01", "interface": "lan_trunk", "via_bridge": "", "via_tag": null },
+              "connected_to": {
+                "host_id": "h_a01",
+                "interface": "lan_trunk",
+                "via_bridge": "",
+                "via_tag": null
+              },
               "access_vlan": "",
-              "native_vlan": "VLAN10",
-              "allowed_vlans": ["VLAN10", "VLAN20", "VLAN30", "VLAN100"],
+              "native_vlan": "v_a01",
+              "allowed_vlans": [
+                "v_a01",
+                "v_a02",
+                "v_a03",
+                "v_a04"
+              ],
               "ip_addresses": []
             },
             {
@@ -1646,8 +1708,13 @@
               "mode": "access",
               "mac": "",
               "parent": "",
-              "connected_to": { "host_id": "hypervisor_01", "interface": "eth0", "via_bridge": "", "via_tag": null },
-              "access_vlan": "VLAN10",
+              "connected_to": {
+                "host_id": "h_a03",
+                "interface": "eth0",
+                "via_bridge": "",
+                "via_tag": null
+              },
+              "access_vlan": "v_a01",
               "native_vlan": "",
               "allowed_vlans": [],
               "ip_addresses": []
@@ -1655,7 +1722,7 @@
           ],
           "services": [
             {
-              "id": "web_admin",
+              "id": "s_a03",
               "name": "web_admin",
               "display_name": "Switch Web UI",
               "category": "management",
@@ -1663,20 +1730,26 @@
               "listen_ip": "192.168.100.2",
               "port": 80,
               "url": "http://192.168.100.2/",
-              "credential_ref": "cred_switch_01"
+              "credential_ref": "c_a03"
             }
           ],
           "links": [],
           "peripherals": []
         },
-        "hypervisor_01": {
+        "h_a03": {
           "kind": "physical",
           "role": "hypervisor",
           "display_name": "Hypervisor",
           "hostname": "pve-01",
-          "aliases": ["pve"],
+          "aliases": [
+            "pve"
+          ],
           "identifiers": [
-            { "kind": "serial", "value": "PVE-SN-7788", "label": "" }
+            {
+              "kind": "serial",
+              "value": "PVE-SN-7788",
+              "label": ""
+            }
           ],
           "hosted_on": "",
           "vm_id": "",
@@ -1690,9 +1763,9 @@
           "manufacturer": "Dell",
           "model": "OptiPlex 7060",
           "hardware_revision": "",
-          "management_vlan": "VLAN100",
+          "management_vlan": "v_a04",
           "management_ip": "192.168.100.10",
-          "credential_ref": "cred_pve_shell",
+          "credential_ref": "c_a04",
           "interfaces": [
             {
               "name": "eth0",
@@ -1700,11 +1773,21 @@
               "mode": "access",
               "mac": "aa:bb:cc:11:11:01",
               "parent": "",
-              "connected_to": { "host_id": "switch_01", "interface": "port_02", "via_bridge": "vmbr0", "via_tag": 10 },
-              "access_vlan": "VLAN10",
+              "connected_to": {
+                "host_id": "h_a02",
+                "interface": "port_02",
+                "via_bridge": "vmbr0",
+                "via_tag": 10
+              },
+              "access_vlan": "v_a01",
               "native_vlan": "",
               "allowed_vlans": [],
-              "ip_addresses": [{ "address": "192.168.10.10", "prefix": 24 }]
+              "ip_addresses": [
+                {
+                  "address": "192.168.10.10",
+                  "prefix": 24
+                }
+              ]
             },
             {
               "name": "vmbr0",
@@ -1712,16 +1795,29 @@
               "mode": "trunk",
               "mac": "aa:bb:cc:11:11:02",
               "parent": "eth0",
-              "connected_to": { "host_id": "", "interface": "", "via_bridge": "", "via_tag": null },
+              "connected_to": {
+                "host_id": "",
+                "interface": "",
+                "via_bridge": "",
+                "via_tag": null
+              },
               "access_vlan": "",
-              "native_vlan": "VLAN10",
-              "allowed_vlans": ["VLAN10", "VLAN100"],
-              "ip_addresses": [{ "address": "192.168.100.10", "prefix": 24 }]
+              "native_vlan": "v_a01",
+              "allowed_vlans": [
+                "v_a01",
+                "v_a04"
+              ],
+              "ip_addresses": [
+                {
+                  "address": "192.168.100.10",
+                  "prefix": 24
+                }
+              ]
             }
           ],
           "services": [
             {
-              "id": "pve_web",
+              "id": "s_a04",
               "name": "pve_web",
               "display_name": "Proxmox Web UI",
               "category": "management",
@@ -1729,7 +1825,7 @@
               "listen_ip": "192.168.100.10",
               "port": 8006,
               "url": "https://192.168.100.10:8006/",
-              "credential_ref": "cred_pve_web"
+              "credential_ref": "c_a05"
             }
           ],
           "links": [],
@@ -1760,14 +1856,14 @@
             }
           ]
         },
-        "vm_homeassistant": {
+        "h_a04": {
           "kind": "virtual",
           "role": "iot",
           "display_name": "Home Assistant",
           "hostname": "ha",
           "aliases": [],
           "identifiers": [],
-          "hosted_on": "hypervisor_01",
+          "hosted_on": "h_a03",
           "vm_id": "100",
           "software": {
             "name": "Home Assistant OS",
@@ -1779,9 +1875,9 @@
           "manufacturer": "",
           "model": "",
           "hardware_revision": "",
-          "management_vlan": "VLAN30",
+          "management_vlan": "v_a03",
           "management_ip": "192.168.30.20",
-          "credential_ref": "cred_ha_web",
+          "credential_ref": "c_a06",
           "interfaces": [
             {
               "name": "eth0",
@@ -1789,16 +1885,26 @@
               "mode": "access",
               "mac": "52:54:00:11:22:33",
               "parent": "",
-              "connected_to": { "host_id": "hypervisor_01", "interface": "vmbr0", "via_bridge": "vmbr0", "via_tag": 30 },
-              "access_vlan": "VLAN30",
+              "connected_to": {
+                "host_id": "h_a03",
+                "interface": "vmbr0",
+                "via_bridge": "vmbr0",
+                "via_tag": 30
+              },
+              "access_vlan": "v_a03",
               "native_vlan": "",
               "allowed_vlans": [],
-              "ip_addresses": [{ "address": "192.168.30.20", "prefix": 24 }]
+              "ip_addresses": [
+                {
+                  "address": "192.168.30.20",
+                  "prefix": 24
+                }
+              ]
             }
           ],
           "services": [
             {
-              "id": "ha_web",
+              "id": "s_a05",
               "name": "ha_web",
               "display_name": "Home Assistant Web UI",
               "category": "application",
@@ -1806,10 +1912,10 @@
               "listen_ip": "192.168.30.20",
               "port": 8123,
               "url": "https://ha.local:8123/",
-              "credential_ref": "cred_ha_web"
+              "credential_ref": "c_a06"
             },
             {
-              "id": "mqtt",
+              "id": "s_a06",
               "name": "mqtt",
               "display_name": "MQTT Broker",
               "category": "infrastructure",
@@ -1817,22 +1923,25 @@
               "listen_ip": "192.168.30.20",
               "port": 1883,
               "url": "",
-              "credential_ref": "cred_mqtt_api"
+              "credential_ref": "c_a07"
             }
           ],
           "links": [
-            { "label": "Cloud dashboard", "url": "https://my.home-assistant.io/" }
+            {
+              "label": "Cloud dashboard",
+              "url": "https://my.home-assistant.io/"
+            }
           ],
           "peripherals": []
         },
-        "ct_pihole": {
+        "h_a05": {
           "kind": "container",
           "role": "server",
           "display_name": "Pi-hole",
           "hostname": "pihole",
           "aliases": [],
           "identifiers": [],
-          "hosted_on": "hypervisor_01",
+          "hosted_on": "h_a03",
           "vm_id": "200",
           "software": {
             "name": "Pi-hole",
@@ -1844,9 +1953,9 @@
           "manufacturer": "",
           "model": "",
           "hardware_revision": "",
-          "management_vlan": "VLAN100",
+          "management_vlan": "v_a04",
           "management_ip": "192.168.100.30",
-          "credential_ref": "cred_pihole_shell",
+          "credential_ref": "c_a08",
           "interfaces": [
             {
               "name": "eth0",
@@ -1854,16 +1963,26 @@
               "mode": "access",
               "mac": "52:54:00:33:44:55",
               "parent": "",
-              "connected_to": { "host_id": "hypervisor_01", "interface": "vmbr0", "via_bridge": "vmbr0", "via_tag": 100 },
-              "access_vlan": "VLAN100",
+              "connected_to": {
+                "host_id": "h_a03",
+                "interface": "vmbr0",
+                "via_bridge": "vmbr0",
+                "via_tag": 100
+              },
+              "access_vlan": "v_a04",
               "native_vlan": "",
               "allowed_vlans": [],
-              "ip_addresses": [{ "address": "192.168.100.30", "prefix": 24 }]
+              "ip_addresses": [
+                {
+                  "address": "192.168.100.30",
+                  "prefix": 24
+                }
+              ]
             }
           ],
           "services": [
             {
-              "id": "dns",
+              "id": "s_a07",
               "name": "dns",
               "display_name": "DNS",
               "category": "infrastructure",
@@ -1874,7 +1993,7 @@
               "credential_ref": ""
             },
             {
-              "id": "pihole_web",
+              "id": "s_a08",
               "name": "pihole_web",
               "display_name": "Pi-hole Admin",
               "category": "management",
@@ -1882,22 +2001,34 @@
               "listen_ip": "192.168.100.30",
               "port": 80,
               "url": "http://192.168.100.30/admin/",
-              "credential_ref": "cred_pihole_web"
+              "credential_ref": "c_a09"
             }
           ],
           "links": [],
           "peripherals": []
         },
-        "pixel_phone": {
+        "h_a06": {
           "kind": "other",
           "role": "iot",
           "display_name": "Pixel 7 Pro",
           "hostname": "pixel",
           "aliases": [],
           "identifiers": [
-            { "kind": "mac", "value": "d4:3a:2c:a0:22:2b", "label": "bluetooth" },
-            { "kind": "imei", "value": "356938035643809", "label": "" },
-            { "kind": "serial", "value": "PX7-SN-9988", "label": "" }
+            {
+              "kind": "mac",
+              "value": "d4:3a:2c:a0:22:2b",
+              "label": "bluetooth"
+            },
+            {
+              "kind": "imei",
+              "value": "356938035643809",
+              "label": ""
+            },
+            {
+              "kind": "serial",
+              "value": "PX7-SN-9988",
+              "label": ""
+            }
           ],
           "hosted_on": "",
           "vm_id": "",
@@ -1921,11 +2052,21 @@
               "mode": "access",
               "mac": "d4:3a:2c:ab:29:0a",
               "parent": "",
-              "connected_to": { "host_id": "ap_01", "interface": "wlan0", "via_bridge": "", "via_tag": null },
-              "access_vlan": "VLAN10",
+              "connected_to": {
+                "host_id": "h_a07",
+                "interface": "wlan0",
+                "via_bridge": "",
+                "via_tag": null
+              },
+              "access_vlan": "v_a01",
               "native_vlan": "",
               "allowed_vlans": [],
-              "ip_addresses": [{ "address": "192.168.10.55", "prefix": 24 }]
+              "ip_addresses": [
+                {
+                  "address": "192.168.10.55",
+                  "prefix": 24
+                }
+              ]
             },
             {
               "name": "bt0",
@@ -1933,7 +2074,12 @@
               "mode": "access",
               "mac": "d4:3a:2c:a0:22:2b",
               "parent": "",
-              "connected_to": { "host_id": "", "interface": "", "via_bridge": "", "via_tag": null },
+              "connected_to": {
+                "host_id": "",
+                "interface": "",
+                "via_bridge": "",
+                "via_tag": null
+              },
               "access_vlan": "",
               "native_vlan": "",
               "allowed_vlans": [],
@@ -1944,7 +2090,7 @@
           "links": [],
           "peripherals": []
         },
-        "ap_01": {
+        "h_a07": {
           "kind": "physical",
           "role": "access_point",
           "display_name": "Access Point",
@@ -1963,9 +2109,9 @@
           "manufacturer": "Ubiquiti",
           "model": "U6-Lite",
           "hardware_revision": "",
-          "management_vlan": "VLAN100",
+          "management_vlan": "v_a04",
           "management_ip": "192.168.100.3",
-          "credential_ref": "cred_ap_console",
+          "credential_ref": "c_a10",
           "interfaces": [
             {
               "name": "wlan0",
@@ -1973,16 +2119,25 @@
               "mode": "trunk",
               "mac": "aa:bb:cc:22:22:01",
               "parent": "",
-              "connected_to": { "host_id": "", "interface": "", "via_bridge": "", "via_tag": null },
+              "connected_to": {
+                "host_id": "",
+                "interface": "",
+                "via_bridge": "",
+                "via_tag": null
+              },
               "access_vlan": "",
-              "native_vlan": "VLAN10",
-              "allowed_vlans": ["VLAN10", "VLAN20", "VLAN30"],
+              "native_vlan": "v_a01",
+              "allowed_vlans": [
+                "v_a01",
+                "v_a02",
+                "v_a03"
+              ],
               "ip_addresses": []
             }
           ],
           "services": [
             {
-              "id": "snmp",
+              "id": "s_a09",
               "name": "snmp",
               "display_name": "SNMP",
               "category": "management",
@@ -1990,13 +2145,13 @@
               "listen_ip": "192.168.100.3",
               "port": 161,
               "url": "",
-              "credential_ref": "cred_ap_snmp"
+              "credential_ref": "c_a11"
             }
           ],
           "links": [],
           "peripherals": []
         },
-        "nas_01": {
+        "h_a08": {
           "kind": "physical",
           "role": "storage",
           "display_name": "NAS",
@@ -2015,9 +2170,9 @@
           "manufacturer": "Supermicro",
           "model": "SuperServer 5028D",
           "hardware_revision": "",
-          "management_vlan": "VLAN100",
+          "management_vlan": "v_a04",
           "management_ip": "192.168.100.40",
-          "credential_ref": "cred_nas_db",
+          "credential_ref": "c_a12",
           "interfaces": [
             {
               "name": "eth0",
@@ -2025,16 +2180,26 @@
               "mode": "access",
               "mac": "aa:bb:cc:33:33:01",
               "parent": "",
-              "connected_to": { "host_id": "switch_01", "interface": "port_02", "via_bridge": "", "via_tag": null },
-              "access_vlan": "VLAN100",
+              "connected_to": {
+                "host_id": "h_a02",
+                "interface": "port_02",
+                "via_bridge": "",
+                "via_tag": null
+              },
+              "access_vlan": "v_a04",
               "native_vlan": "",
               "allowed_vlans": [],
-              "ip_addresses": [{ "address": "192.168.100.40", "prefix": 24 }]
+              "ip_addresses": [
+                {
+                  "address": "192.168.100.40",
+                  "prefix": 24
+                }
+              ]
             }
           ],
           "services": [
             {
-              "id": "smb",
+              "id": "s_a10",
               "name": "smb",
               "display_name": "SMB share",
               "category": "application",
@@ -2045,7 +2210,7 @@
               "credential_ref": ""
             },
             {
-              "id": "rdp_jump",
+              "id": "s_a11",
               "name": "rdp_jump",
               "display_name": "RDP jump",
               "category": "other",
@@ -2056,7 +2221,7 @@
               "credential_ref": ""
             },
             {
-              "id": "tcp_misc",
+              "id": "s_a12",
               "name": "tcp_misc",
               "display_name": "Misc TCP",
               "category": "other",
@@ -2072,101 +2237,140 @@
         }
       },
       "credentials": {
-        "cred_router_01": {
+        "c_a01": {
           "type": "web",
           "username": "admin",
           "password": "",
-          "external_ref": { "provider": "Bitwarden", "id": "router-web-001" },
+          "external_ref": {
+            "provider": "Bitwarden",
+            "id": "router-web-001"
+          },
           "notes": "Router admin web UI"
         },
-        "cred_router_shell": {
+        "c_a02": {
           "type": "shell",
           "username": "root",
-          "password": "",
-          "external_ref": { "provider": "Bitwarden", "id": "router-shell-002" },
+          "password": "selftest-pw-02",
+          "external_ref": {
+            "provider": "Bitwarden",
+            "id": "router-shell-002"
+          },
           "notes": ""
         },
-        "cred_switch_01": {
+        "c_a03": {
           "type": "web",
           "username": "admin",
-          "password": "",
-          "external_ref": { "provider": "1Password", "id": "switch-web-003" },
+          "password": "selftest-pw-03",
+          "external_ref": {
+            "provider": "1Password",
+            "id": "switch-web-003"
+          },
           "notes": ""
         },
-        "cred_pve_shell": {
+        "c_a04": {
           "type": "shell",
           "username": "root",
-          "password": "",
-          "external_ref": { "provider": "Bitwarden", "id": "pve-shell-004" },
+          "password": "selftest-pw-04",
+          "external_ref": {
+            "provider": "Bitwarden",
+            "id": "pve-shell-004"
+          },
           "notes": ""
         },
-        "cred_pve_web": {
+        "c_a05": {
           "type": "web",
           "username": "root@pam",
-          "password": "",
-          "external_ref": { "provider": "Bitwarden", "id": "pve-web-005" },
+          "password": "selftest-pw-05",
+          "external_ref": {
+            "provider": "Bitwarden",
+            "id": "pve-web-005"
+          },
           "notes": ""
         },
-        "cred_ha_web": {
+        "c_a06": {
           "type": "web",
           "username": "homeassistant",
-          "password": "",
-          "external_ref": { "provider": "Bitwarden", "id": "ha-web-006" },
+          "password": "selftest-pw-06",
+          "external_ref": {
+            "provider": "Bitwarden",
+            "id": "ha-web-006"
+          },
           "notes": ""
         },
-        "cred_mqtt_api": {
+        "c_a07": {
           "type": "api",
           "username": "mqtt-token",
-          "password": "",
-          "external_ref": { "provider": "Vault", "id": "mqtt/api/007" },
+          "password": "selftest-pw-07",
+          "external_ref": {
+            "provider": "Vault",
+            "id": "mqtt/api/007"
+          },
           "notes": ""
         },
-        "cred_pihole_shell": {
+        "c_a08": {
           "type": "shell",
           "username": "root",
-          "password": "",
-          "external_ref": { "provider": "Bitwarden", "id": "pihole-shell-008" },
+          "password": "selftest-pw-08",
+          "external_ref": {
+            "provider": "Bitwarden",
+            "id": "pihole-shell-008"
+          },
           "notes": ""
         },
-        "cred_pihole_web": {
+        "c_a09": {
           "type": "web",
           "username": "admin",
-          "password": "",
-          "external_ref": { "provider": "Bitwarden", "id": "pihole-web-009" },
+          "password": "selftest-pw-09",
+          "external_ref": {
+            "provider": "Bitwarden",
+            "id": "pihole-web-009"
+          },
           "notes": ""
         },
-        "cred_ap_console": {
+        "c_a10": {
           "type": "console",
           "username": "admin",
-          "password": "",
-          "external_ref": { "provider": "1Password", "id": "ap-console-010" },
+          "password": "selftest-pw-10",
+          "external_ref": {
+            "provider": "1Password",
+            "id": "ap-console-010"
+          },
           "notes": ""
         },
-        "cred_ap_snmp": {
+        "c_a11": {
           "type": "snmp",
           "username": "public",
-          "password": "",
-          "external_ref": { "provider": "1Password", "id": "ap-snmp-011" },
+          "password": "selftest-pw-11",
+          "external_ref": {
+            "provider": "1Password",
+            "id": "ap-snmp-011"
+          },
           "notes": ""
         },
-        "cred_nas_db": {
+        "c_a12": {
           "type": "database",
           "username": "dbadmin",
-          "password": "",
-          "external_ref": { "provider": "Vault", "id": "nas/db/012" },
+          "password": "selftest-pw-12",
+          "external_ref": {
+            "provider": "Vault",
+            "id": "nas/db/012"
+          },
           "notes": ""
         },
-        "cred_misc_other": {
+        "c_a13": {
           "type": "other",
           "username": "",
-          "password": "",
-          "external_ref": { "provider": "KeePass", "id": "misc-013" },
+          "password": "selftest-pw-13",
+          "external_ref": {
+            "provider": "KeePass",
+            "id": "misc-013"
+          },
           "notes": "Free-floating credential"
         }
       }
     }
   },
-  "activeNetworkId": "homelab"
+  "activeNetworkId": "n_a01"
 }
 </script>
 
@@ -2188,13 +2392,13 @@
   "data": {
     "schemaVersion": 0,
     "networks": {
-      "homelab": {
+      "n_a01": {
         "network": {
           "name": "Homelab",
           "description": "Fully-populated fixture exercising every record type and field."
         },
         "vlans": {
-          "VLAN10": {
+          "v_a01": {
             "name": "LAN",
             "tag": 10,
             "gateway_ip": "192.168.10.1",
@@ -2203,7 +2407,7 @@
             "dhcp_range_start": "192.168.10.100",
             "dhcp_range_end": "192.168.10.200"
           },
-          "VLAN20": {
+          "v_a02": {
             "name": "GUEST",
             "tag": 20,
             "gateway_ip": "192.168.20.1",
@@ -2212,7 +2416,7 @@
             "dhcp_range_start": "192.168.20.100",
             "dhcp_range_end": "192.168.20.200"
           },
-          "VLAN30": {
+          "v_a03": {
             "name": "IOT",
             "tag": 30,
             "gateway_ip": "192.168.30.1",
@@ -2221,7 +2425,7 @@
             "dhcp_range_start": "192.168.30.50",
             "dhcp_range_end": "192.168.30.250"
           },
-          "VLAN100": {
+          "v_a04": {
             "name": "MGMT",
             "tag": 100,
             "gateway_ip": "192.168.100.1",
@@ -2232,7 +2436,7 @@
           }
         },
         "hosts": {
-          "router_01": {
+          "h_a01": {
             "kind": "physical",
             "role": "router",
             "display_name": "Router",
@@ -2260,9 +2464,9 @@
             "manufacturer": "Protectli",
             "model": "FW6B",
             "hardware_revision": "Rev A2",
-            "management_vlan": "VLAN100",
+            "management_vlan": "v_a04",
             "management_ip": "192.168.100.1",
-            "credential_ref": "cred_router_01",
+            "credential_ref": "c_a01",
             "interfaces": [
               {
                 "name": "wan",
@@ -2293,18 +2497,18 @@
                 "mac": "aa:bb:cc:00:00:02",
                 "parent": "",
                 "connected_to": {
-                  "host_id": "switch_01",
+                  "host_id": "h_a02",
                   "interface": "port_01",
                   "via_bridge": "",
                   "via_tag": null
                 },
                 "access_vlan": "",
-                "native_vlan": "VLAN10",
+                "native_vlan": "v_a01",
                 "allowed_vlans": [
-                  "VLAN10",
-                  "VLAN20",
-                  "VLAN30",
-                  "VLAN100"
+                  "v_a01",
+                  "v_a02",
+                  "v_a03",
+                  "v_a04"
                 ],
                 "ip_addresses": [
                   {
@@ -2350,7 +2554,7 @@
             ],
             "services": [
               {
-                "id": "web_admin",
+                "id": "s_a01",
                 "name": "web_admin",
                 "display_name": "Router Admin UI",
                 "category": "management",
@@ -2358,10 +2562,10 @@
                 "listen_ip": "192.168.100.1",
                 "port": 443,
                 "url": "https://192.168.100.1/",
-                "credential_ref": "cred_router_01"
+                "credential_ref": "c_a01"
               },
               {
-                "id": "ssh",
+                "id": "s_a02",
                 "name": "ssh",
                 "display_name": "SSH",
                 "category": "management",
@@ -2369,7 +2573,7 @@
                 "listen_ip": "192.168.100.1",
                 "port": 22,
                 "url": "",
-                "credential_ref": "cred_router_shell"
+                "credential_ref": "c_a02"
               }
             ],
             "links": [
@@ -2380,7 +2584,7 @@
             ],
             "peripherals": []
           },
-          "switch_01": {
+          "h_a02": {
             "kind": "physical",
             "role": "switch",
             "display_name": "Core Switch",
@@ -2399,9 +2603,9 @@
             "manufacturer": "Netgear",
             "model": "GS308E",
             "hardware_revision": "",
-            "management_vlan": "VLAN100",
+            "management_vlan": "v_a04",
             "management_ip": "192.168.100.2",
-            "credential_ref": "cred_switch_01",
+            "credential_ref": "c_a03",
             "interfaces": [
               {
                 "name": "port_01",
@@ -2410,18 +2614,18 @@
                 "mac": "",
                 "parent": "",
                 "connected_to": {
-                  "host_id": "router_01",
+                  "host_id": "h_a01",
                   "interface": "lan_trunk",
                   "via_bridge": "",
                   "via_tag": null
                 },
                 "access_vlan": "",
-                "native_vlan": "VLAN10",
+                "native_vlan": "v_a01",
                 "allowed_vlans": [
-                  "VLAN10",
-                  "VLAN20",
-                  "VLAN30",
-                  "VLAN100"
+                  "v_a01",
+                  "v_a02",
+                  "v_a03",
+                  "v_a04"
                 ],
                 "ip_addresses": []
               },
@@ -2432,12 +2636,12 @@
                 "mac": "",
                 "parent": "",
                 "connected_to": {
-                  "host_id": "hypervisor_01",
+                  "host_id": "h_a03",
                   "interface": "eth0",
                   "via_bridge": "",
                   "via_tag": null
                 },
-                "access_vlan": "VLAN10",
+                "access_vlan": "v_a01",
                 "native_vlan": "",
                 "allowed_vlans": [],
                 "ip_addresses": []
@@ -2445,7 +2649,7 @@
             ],
             "services": [
               {
-                "id": "web_admin",
+                "id": "s_a03",
                 "name": "web_admin",
                 "display_name": "Switch Web UI",
                 "category": "management",
@@ -2453,13 +2657,13 @@
                 "listen_ip": "192.168.100.2",
                 "port": 80,
                 "url": "http://192.168.100.2/",
-                "credential_ref": "cred_switch_01"
+                "credential_ref": "c_a03"
               }
             ],
             "links": [],
             "peripherals": []
           },
-          "hypervisor_01": {
+          "h_a03": {
             "kind": "physical",
             "role": "hypervisor",
             "display_name": "Hypervisor",
@@ -2486,9 +2690,9 @@
             "manufacturer": "Dell",
             "model": "OptiPlex 7060",
             "hardware_revision": "",
-            "management_vlan": "VLAN100",
+            "management_vlan": "v_a04",
             "management_ip": "192.168.100.10",
-            "credential_ref": "cred_pve_shell",
+            "credential_ref": "c_a04",
             "interfaces": [
               {
                 "name": "eth0",
@@ -2497,12 +2701,12 @@
                 "mac": "aa:bb:cc:11:11:01",
                 "parent": "",
                 "connected_to": {
-                  "host_id": "switch_01",
+                  "host_id": "h_a02",
                   "interface": "port_02",
                   "via_bridge": "vmbr0",
                   "via_tag": 10
                 },
-                "access_vlan": "VLAN10",
+                "access_vlan": "v_a01",
                 "native_vlan": "",
                 "allowed_vlans": [],
                 "ip_addresses": [
@@ -2525,10 +2729,10 @@
                   "via_tag": null
                 },
                 "access_vlan": "",
-                "native_vlan": "VLAN10",
+                "native_vlan": "v_a01",
                 "allowed_vlans": [
-                  "VLAN10",
-                  "VLAN100"
+                  "v_a01",
+                  "v_a04"
                 ],
                 "ip_addresses": [
                   {
@@ -2540,7 +2744,7 @@
             ],
             "services": [
               {
-                "id": "pve_web",
+                "id": "s_a04",
                 "name": "pve_web",
                 "display_name": "Proxmox Web UI",
                 "category": "management",
@@ -2548,7 +2752,7 @@
                 "listen_ip": "192.168.100.10",
                 "port": 8006,
                 "url": "https://192.168.100.10:8006/",
-                "credential_ref": "cred_pve_web"
+                "credential_ref": "c_a05"
               }
             ],
             "links": [],
@@ -2579,14 +2783,14 @@
               }
             ]
           },
-          "vm_homeassistant": {
+          "h_a04": {
             "kind": "virtual",
             "role": "iot",
             "display_name": "Home Assistant",
             "hostname": "ha",
             "aliases": [],
             "identifiers": [],
-            "hosted_on": "hypervisor_01",
+            "hosted_on": "h_a03",
             "vm_id": "100",
             "software": {
               "name": "Home Assistant OS",
@@ -2598,9 +2802,9 @@
             "manufacturer": "",
             "model": "",
             "hardware_revision": "",
-            "management_vlan": "VLAN30",
+            "management_vlan": "v_a03",
             "management_ip": "192.168.30.20",
-            "credential_ref": "cred_ha_web",
+            "credential_ref": "c_a06",
             "interfaces": [
               {
                 "name": "eth0",
@@ -2609,12 +2813,12 @@
                 "mac": "52:54:00:11:22:33",
                 "parent": "",
                 "connected_to": {
-                  "host_id": "hypervisor_01",
+                  "host_id": "h_a03",
                   "interface": "vmbr0",
                   "via_bridge": "vmbr0",
                   "via_tag": 30
                 },
-                "access_vlan": "VLAN30",
+                "access_vlan": "v_a03",
                 "native_vlan": "",
                 "allowed_vlans": [],
                 "ip_addresses": [
@@ -2627,7 +2831,7 @@
             ],
             "services": [
               {
-                "id": "ha_web",
+                "id": "s_a05",
                 "name": "ha_web",
                 "display_name": "Home Assistant Web UI",
                 "category": "application",
@@ -2635,10 +2839,10 @@
                 "listen_ip": "192.168.30.20",
                 "port": 8123,
                 "url": "https://ha.local:8123/",
-                "credential_ref": "cred_ha_web"
+                "credential_ref": "c_a06"
               },
               {
-                "id": "mqtt",
+                "id": "s_a06",
                 "name": "mqtt",
                 "display_name": "MQTT Broker",
                 "category": "infrastructure",
@@ -2646,7 +2850,7 @@
                 "listen_ip": "192.168.30.20",
                 "port": 1883,
                 "url": "",
-                "credential_ref": "cred_mqtt_api"
+                "credential_ref": "c_a07"
               }
             ],
             "links": [
@@ -2657,14 +2861,14 @@
             ],
             "peripherals": []
           },
-          "ct_pihole": {
+          "h_a05": {
             "kind": "container",
             "role": "server",
             "display_name": "Pi-hole",
             "hostname": "pihole",
             "aliases": [],
             "identifiers": [],
-            "hosted_on": "hypervisor_01",
+            "hosted_on": "h_a03",
             "vm_id": "200",
             "software": {
               "name": "Pi-hole",
@@ -2676,9 +2880,9 @@
             "manufacturer": "",
             "model": "",
             "hardware_revision": "",
-            "management_vlan": "VLAN100",
+            "management_vlan": "v_a04",
             "management_ip": "192.168.100.30",
-            "credential_ref": "cred_pihole_shell",
+            "credential_ref": "c_a08",
             "interfaces": [
               {
                 "name": "eth0",
@@ -2687,12 +2891,12 @@
                 "mac": "52:54:00:33:44:55",
                 "parent": "",
                 "connected_to": {
-                  "host_id": "hypervisor_01",
+                  "host_id": "h_a03",
                   "interface": "vmbr0",
                   "via_bridge": "vmbr0",
                   "via_tag": 100
                 },
-                "access_vlan": "VLAN100",
+                "access_vlan": "v_a04",
                 "native_vlan": "",
                 "allowed_vlans": [],
                 "ip_addresses": [
@@ -2705,7 +2909,7 @@
             ],
             "services": [
               {
-                "id": "dns",
+                "id": "s_a07",
                 "name": "dns",
                 "display_name": "DNS",
                 "category": "infrastructure",
@@ -2716,7 +2920,7 @@
                 "credential_ref": ""
               },
               {
-                "id": "pihole_web",
+                "id": "s_a08",
                 "name": "pihole_web",
                 "display_name": "Pi-hole Admin",
                 "category": "management",
@@ -2724,13 +2928,13 @@
                 "listen_ip": "192.168.100.30",
                 "port": 80,
                 "url": "http://192.168.100.30/admin/",
-                "credential_ref": "cred_pihole_web"
+                "credential_ref": "c_a09"
               }
             ],
             "links": [],
             "peripherals": []
           },
-          "pixel_phone": {
+          "h_a06": {
             "kind": "other",
             "role": "iot",
             "display_name": "Pixel 7 Pro",
@@ -2776,12 +2980,12 @@
                 "mac": "d4:3a:2c:ab:29:0a",
                 "parent": "",
                 "connected_to": {
-                  "host_id": "ap_01",
+                  "host_id": "h_a07",
                   "interface": "wlan0",
                   "via_bridge": "",
                   "via_tag": null
                 },
-                "access_vlan": "VLAN10",
+                "access_vlan": "v_a01",
                 "native_vlan": "",
                 "allowed_vlans": [],
                 "ip_addresses": [
@@ -2813,7 +3017,7 @@
             "links": [],
             "peripherals": []
           },
-          "ap_01": {
+          "h_a07": {
             "kind": "physical",
             "role": "access_point",
             "display_name": "Access Point",
@@ -2832,9 +3036,9 @@
             "manufacturer": "Ubiquiti",
             "model": "U6-Lite",
             "hardware_revision": "",
-            "management_vlan": "VLAN100",
+            "management_vlan": "v_a04",
             "management_ip": "192.168.100.3",
-            "credential_ref": "cred_ap_console",
+            "credential_ref": "c_a10",
             "interfaces": [
               {
                 "name": "wlan0",
@@ -2849,18 +3053,18 @@
                   "via_tag": null
                 },
                 "access_vlan": "",
-                "native_vlan": "VLAN10",
+                "native_vlan": "v_a01",
                 "allowed_vlans": [
-                  "VLAN10",
-                  "VLAN20",
-                  "VLAN30"
+                  "v_a01",
+                  "v_a02",
+                  "v_a03"
                 ],
                 "ip_addresses": []
               }
             ],
             "services": [
               {
-                "id": "snmp",
+                "id": "s_a09",
                 "name": "snmp",
                 "display_name": "SNMP",
                 "category": "management",
@@ -2868,13 +3072,13 @@
                 "listen_ip": "192.168.100.3",
                 "port": 161,
                 "url": "",
-                "credential_ref": "cred_ap_snmp"
+                "credential_ref": "c_a11"
               }
             ],
             "links": [],
             "peripherals": []
           },
-          "nas_01": {
+          "h_a08": {
             "kind": "physical",
             "role": "storage",
             "display_name": "NAS",
@@ -2893,9 +3097,9 @@
             "manufacturer": "Supermicro",
             "model": "SuperServer 5028D",
             "hardware_revision": "",
-            "management_vlan": "VLAN100",
+            "management_vlan": "v_a04",
             "management_ip": "192.168.100.40",
-            "credential_ref": "cred_nas_db",
+            "credential_ref": "c_a12",
             "interfaces": [
               {
                 "name": "eth0",
@@ -2904,12 +3108,12 @@
                 "mac": "aa:bb:cc:33:33:01",
                 "parent": "",
                 "connected_to": {
-                  "host_id": "switch_01",
+                  "host_id": "h_a02",
                   "interface": "port_02",
                   "via_bridge": "",
                   "via_tag": null
                 },
-                "access_vlan": "VLAN100",
+                "access_vlan": "v_a04",
                 "native_vlan": "",
                 "allowed_vlans": [],
                 "ip_addresses": [
@@ -2922,7 +3126,7 @@
             ],
             "services": [
               {
-                "id": "smb",
+                "id": "s_a10",
                 "name": "smb",
                 "display_name": "SMB share",
                 "category": "application",
@@ -2933,7 +3137,7 @@
                 "credential_ref": ""
               },
               {
-                "id": "rdp_jump",
+                "id": "s_a11",
                 "name": "rdp_jump",
                 "display_name": "RDP jump",
                 "category": "other",
@@ -2944,7 +3148,7 @@
                 "credential_ref": ""
               },
               {
-                "id": "tcp_misc",
+                "id": "s_a12",
                 "name": "tcp_misc",
                 "display_name": "Misc TCP",
                 "category": "other",
@@ -2960,25 +3164,22 @@
           }
         },
         "credentials": {
-          "cred_router_01": {
+          "c_a01": {
             "type": "web",
             "username": "admin",
-            "password": {
-              "iv": "AAAAAAAAAAAAAAAA",
-              "ct": "VphHtbENxg1Yi/Z6acMf1A=="
-            },
+            "password": "",
             "external_ref": {
               "provider": "Bitwarden",
               "id": "router-web-001"
             },
             "notes": "Router admin web UI"
           },
-          "cred_router_shell": {
+          "c_a02": {
             "type": "shell",
             "username": "root",
             "password": {
-              "iv": "AAAAAAAAAAAAAAAB",
-              "ct": "mHjotQxwUoszOFjQDP2iLQ=="
+              "iv": "rC3KOKl7XQRTuCFW",
+              "ct": "lsOvr7+uBWLCmcvFHZLT9jZ/xV57xXHeZi9Ap27A"
             },
             "external_ref": {
               "provider": "Bitwarden",
@@ -2986,12 +3187,12 @@
             },
             "notes": ""
           },
-          "cred_switch_01": {
+          "c_a03": {
             "type": "web",
             "username": "admin",
             "password": {
-              "iv": "AAAAAAAAAAAAAAAC",
-              "ct": "7PIQmiXCDSZoOmkDsEVzJg=="
+              "iv": "nhapxt4Ovakfg6us",
+              "ct": "hMOojqbOShHfvOu0go4uLQROXYndl3xxp8+Bi3hy"
             },
             "external_ref": {
               "provider": "1Password",
@@ -2999,12 +3200,12 @@
             },
             "notes": ""
           },
-          "cred_pve_shell": {
+          "c_a04": {
             "type": "shell",
             "username": "root",
             "password": {
-              "iv": "AAAAAAAAAAAAAAAD",
-              "ct": "sn1tda4WMBHVJulALXdg9Q=="
+              "iv": "ym3a3I5zT+mvs0xX",
+              "ct": "0WujmwUL5N8gqqO1lYw176v30gAbmqhYIb0amuGL"
             },
             "external_ref": {
               "provider": "Bitwarden",
@@ -3012,12 +3213,12 @@
             },
             "notes": ""
           },
-          "cred_pve_web": {
+          "c_a05": {
             "type": "web",
             "username": "root@pam",
             "password": {
-              "iv": "AAAAAAAAAAAAAAAE",
-              "ct": "jiWY1lUQOfqCfn1rNR80Sg=="
+              "iv": "/AsmpkZimNjquCgo",
+              "ct": "wCxQgVH+Eg0k3pXYSWVLtjQP3758Pa8wm80ktFSz"
             },
             "external_ref": {
               "provider": "Bitwarden",
@@ -3025,12 +3226,12 @@
             },
             "notes": ""
           },
-          "cred_ha_web": {
+          "c_a06": {
             "type": "web",
             "username": "homeassistant",
             "password": {
-              "iv": "AAAAAAAAAAAAAAAF",
-              "ct": "Fj9AWRpwhvH+drHKPYc+Xg=="
+              "iv": "tPUR5fq4dOIJYYgs",
+              "ct": "PEu8yf+/qBfB9XUfSYI0Tu72YyYBId5dQSLAXJGv"
             },
             "external_ref": {
               "provider": "Bitwarden",
@@ -3038,12 +3239,12 @@
             },
             "notes": ""
           },
-          "cred_mqtt_api": {
+          "c_a07": {
             "type": "api",
             "username": "mqtt-token",
             "password": {
-              "iv": "AAAAAAAAAAAAAAAG",
-              "ct": "YMFGCR2I9c/8dTikf7p0Og=="
+              "iv": "vTY0shE3YGBVAU/n",
+              "ct": "n74kEqOytFI3NY6En4HTJrjVjy8DXhtsgSIux6xo"
             },
             "external_ref": {
               "provider": "Vault",
@@ -3051,12 +3252,12 @@
             },
             "notes": ""
           },
-          "cred_pihole_shell": {
+          "c_a08": {
             "type": "shell",
             "username": "root",
             "password": {
-              "iv": "AAAAAAAAAAAAAAAH",
-              "ct": "sWiOuWXJdVMvsM7/x3tDAg=="
+              "iv": "fLVSchS5fgd8HztX",
+              "ct": "Yv51vpuz+WBDAnHpnZ9kmCCjxpKOc9Kxsrpwhaku"
             },
             "external_ref": {
               "provider": "Bitwarden",
@@ -3064,12 +3265,12 @@
             },
             "notes": ""
           },
-          "cred_pihole_web": {
+          "c_a09": {
             "type": "web",
             "username": "admin",
             "password": {
-              "iv": "AAAAAAAAAAAAAAAI",
-              "ct": "2dxEUgmfLGXvwEfo+/Zxlw=="
+              "iv": "Ndb/Q83akZCYurMA",
+              "ct": "hobclYQJRlNNo1k+nzIanbrzmoOlRscDjQqjHtt4"
             },
             "external_ref": {
               "provider": "Bitwarden",
@@ -3077,12 +3278,12 @@
             },
             "notes": ""
           },
-          "cred_ap_console": {
+          "c_a10": {
             "type": "console",
             "username": "admin",
             "password": {
-              "iv": "AAAAAAAAAAAAAAAJ",
-              "ct": "5cDXLFRIdvPepNofgzBtKw=="
+              "iv": "+/Khyvr1xs41t4B2",
+              "ct": "Nbckc98jZ/3rJDp058vgLIk9gKd5tmPJK7WuJg+K"
             },
             "external_ref": {
               "provider": "1Password",
@@ -3090,12 +3291,12 @@
             },
             "notes": ""
           },
-          "cred_ap_snmp": {
+          "c_a11": {
             "type": "snmp",
             "username": "public",
             "password": {
-              "iv": "AAAAAAAAAAAAAAAK",
-              "ct": "Zus7coTaSStISmz5CwoQew=="
+              "iv": "wezxqh0KK0NqAuGx",
+              "ct": "W01Lk7U8pkyVdUTcJchjd+3saHTk1+FpZB7KwJE7"
             },
             "external_ref": {
               "provider": "1Password",
@@ -3103,12 +3304,12 @@
             },
             "notes": ""
           },
-          "cred_nas_db": {
+          "c_a12": {
             "type": "database",
             "username": "dbadmin",
             "password": {
-              "iv": "AAAAAAAAAAAAAAAL",
-              "ct": "t6IJ3oqTLkjqygvxN9YwYg=="
+              "iv": "UCzNiehoVwS78R2c",
+              "ct": "Q9UxvEeHDweuI4qAYK9CgfPLm4ioSQG/qgdUtfZD"
             },
             "external_ref": {
               "provider": "Vault",
@@ -3116,12 +3317,12 @@
             },
             "notes": ""
           },
-          "cred_misc_other": {
+          "c_a13": {
             "type": "other",
             "username": "",
             "password": {
-              "iv": "AAAAAAAAAAAAAAAM",
-              "ct": "+/eA6Hez2FLFYM+2QDKuZA=="
+              "iv": "dUWrVDSJdEdrMSVK",
+              "ct": "lKEmvooc3G+PtR1bP4F7nqQALbnTImM+9SNLcixZ"
             },
             "external_ref": {
               "provider": "KeePass",
@@ -3132,7 +3333,7 @@
         }
       }
     },
-    "activeNetworkId": "homelab"
+    "activeNetworkId": "n_a01"
   }
 }
 </script>
@@ -3452,20 +3653,16 @@ function slugify(s) {
     .slice(0, 60);
 }
 
-function uniqueId(base, existing) {
-  const baseId = slugify(base) || "item";
-  if (!existing[baseId]) return baseId;
-  let i = 2;
-  while (existing[`${baseId}_${i}`]) i++;
-  return `${baseId}_${i}`;
-}
-
-function newCredId(name, existing) {
-  const base = slugify(name).startsWith("cred_") ? slugify(name) : `cred_${slugify(name) || "item"}`;
-  if (!existing[base]) return base;
-  let i = 2;
-  while (existing[`${base}_${i}`]) i++;
-  return `${base}_${i}`;
+function randomId(prefix, existing) {
+  const buf = new Uint8Array(3);
+  for (let attempt = 0; attempt < 10000; attempt++) {
+    crypto.getRandomValues(buf);
+    let hex = "";
+    for (let i = 0; i < buf.length; i++) hex += buf[i].toString(16).padStart(2, "0");
+    const id = `${prefix}_${hex}`;
+    if (!existing || !existing[id]) return id;
+  }
+  throw new Error(`could not allocate fresh ${prefix}_ id`);
 }
 
 function isValidIp(s) {
@@ -3603,7 +3800,7 @@ function normalizeData(d) {
   }
   if (d.network || d.vlans || d.hosts || d.credentials) {
     const single = normalizeNetwork(d);
-    const id = uniqueNetworkId(single.network.name || "Network", {});
+    const id = randomId("n", {});
     return { schemaVersion: SCHEMA_VERSION, networks: { [id]: single }, activeNetworkId: id };
   }
   return seedData();
@@ -3687,8 +3884,7 @@ function normalizeNetwork(d) {
           const usedIds = {};
           return v.services.map(svc => {
             let sid = (typeof svc?.id === "string" && svc.id.trim()) ? svc.id.trim() : "";
-            if (!sid) sid = uniqueId(svc?.name || "service", usedIds);
-            else if (usedIds[sid]) sid = uniqueId(sid, usedIds);
+            if (!sid || usedIds[sid]) sid = randomId("s", usedIds);
             usedIds[sid] = true;
             return {
               id: sid,
@@ -3724,13 +3920,6 @@ function normalizeNetwork(d) {
   return out;
 }
 
-function uniqueNetworkId(name, existing) {
-  const base = slugify(name) || "network";
-  if (!existing[base]) return base;
-  let i = 2;
-  while (existing[`${base}_${i}`]) i++;
-  return `${base}_${i}`;
-}
 
 function validateRefs(net) {
   if (!net) return [];
@@ -3817,7 +4006,7 @@ function switchNetwork(id) {
 }
 
 function createNetworkAndSwitch(name, description) {
-  const id = uniqueNetworkId(name, data.networks);
+  const id = randomId("n", data.networks);
   data.networks[id] = emptyNetwork(name.trim(), description.trim());
   data.activeNetworkId = id;
   state = data.networks[id];
@@ -4879,13 +5068,13 @@ function renderVlans(root) {
       : "";
     const card = document.createElement("div");
     card.className = "vlan-card";
+    card.dataset.vlanId = id;
     card.innerHTML = `
       <div class="vc-head">
-        <span class="vc-id">${escapeHtml(id)}</span>
-        <span class="vc-name">${escapeHtml(v.name || "")}</span>
+        <span class="vc-id">${escapeHtml(v.name || "(unnamed VLAN)")}</span>
         ${v.tag != null ? `<span class="vc-tag">tag ${escapeHtml(String(v.tag))}</span>` : ""}
         <div class="vc-actions">
-          <button class="btn sm ghost" data-action="edit-vlan" data-vlan-id="${escapeHtml(id)}" aria-label="Edit ${escapeHtml(id)}">Edit</button>
+          <button class="btn sm ghost" data-action="edit-vlan" data-vlan-id="${escapeHtml(id)}" aria-label="Edit ${escapeHtml(v.name || id)}">Edit</button>
         </div>
       </div>
       <div class="vc-net${gw ? "" : " is-empty"}">${escapeHtml(gw || "no gateway")}</div>
@@ -4932,21 +5121,31 @@ function openVlanForm(id = null) {
 
   const body = document.createElement("div");
 
-  const idTagRow = document.createElement("div");
-  idTagRow.className = "row r-2";
-  idTagRow.appendChild(field({
-    label: "VLAN ID",
-    id: "vlan_id",
-    html: `<input id="vlan_id" type="text" value="${escapeHtml(initialId)}" placeholder="VLAN10" ${isEdit ? "readonly" : ""} required>`,
-    help: isEdit ? "ID cannot be changed after creation." : "Short stable identifier (e.g. VLAN10)."
-  }));
-  idTagRow.appendChild(field({
-    label: "Tag",
-    id: "vlan_tag",
-    html: `<input id="vlan_tag" type="number" min="1" max="4094" value="${escapeHtml(v.tag != null ? v.tag : "")}" placeholder="e.g. 10" required>`,
-    help: "802.1Q VLAN tag (1–4094)."
-  }));
-  body.appendChild(idTagRow);
+  const tagFieldHtml = `<input id="vlan_tag" type="number" min="1" max="4094" value="${escapeHtml(v.tag != null ? v.tag : "")}" placeholder="e.g. 10" required>`;
+  if (isEdit) {
+    const idTagRow = document.createElement("div");
+    idTagRow.className = "row r-2";
+    idTagRow.appendChild(field({
+      label: "VLAN ID",
+      id: "vlan_id",
+      html: `<input id="vlan_id" type="text" value="${escapeHtml(initialId)}" readonly>`,
+      help: "Auto-generated, readonly."
+    }));
+    idTagRow.appendChild(field({
+      label: "Tag",
+      id: "vlan_tag",
+      html: tagFieldHtml,
+      help: "802.1Q VLAN tag (1–4094)."
+    }));
+    body.appendChild(idTagRow);
+  } else {
+    body.appendChild(field({
+      label: "Tag",
+      id: "vlan_tag",
+      html: tagFieldHtml,
+      help: "802.1Q VLAN tag (1–4094). ID is auto-generated on save."
+    }));
+  }
   body.appendChild(field({
     label: "Name",
     id: "vlan_name",
@@ -4995,7 +5194,6 @@ function openVlanForm(id = null) {
     body,
     saveLabel: isEdit ? "Save changes" : "Create VLAN",
     onSave: () => {
-      const newId = $("#vlan_id", body).value.trim();
       const name  = $("#vlan_name", body).value.trim();
       const tagRaw = $("#vlan_tag", body).value.trim();
       const gw    = $("#vlan_gw", body).value.trim();
@@ -5003,7 +5201,6 @@ function openVlanForm(id = null) {
       const rangeStart = dhcp ? $("#vlan_dhcp_start", body).value.trim() : "";
       const rangeEnd   = dhcp ? $("#vlan_dhcp_end", body).value.trim()   : "";
 
-      if (!newId) { toast("VLAN ID is required", "error"); return false; }
       if (!name)  { toast("Name is required", "error"); return false; }
       if (!tagRaw || !/^\d+$/.test(tagRaw)) { toast("Tag is required and must be an integer 1–4094", "error"); return false; }
       const tag = parseInt(tagRaw, 10);
@@ -5019,11 +5216,7 @@ function openVlanForm(id = null) {
       if (rangeEnd   && !isValidIp(rangeEnd))   { toast("DHCP range end is not a valid IPv4 address", "error"); return false; }
       if ((rangeStart && !rangeEnd) || (!rangeStart && rangeEnd)) { toast("DHCP range needs both start and end addresses", "error"); return false; }
 
-      if (!isEdit && state.vlans[newId]) {
-        toast(`VLAN '${newId}' already exists`, "error");
-        return false;
-      }
-
+      const newId = isEdit ? id : randomId("v", state.vlans);
       state.vlans[newId] = { name, tag, gateway_ip, subnet_prefix, dhcp, dhcp_range_start: rangeStart, dhcp_range_end: rangeEnd };
       saveState();
       render();
@@ -5185,16 +5378,14 @@ function hostDetailCard(id) {
   const ep = state.hosts[id];
   const card = document.createElement("div");
   card.className = "host-card";
+  card.dataset.hostId = id;
   const cred = ep.credential_ref && state.credentials[ep.credential_ref];
 
   const swLabel = formatSoftware(ep.software);
   const hwLabel = formatHardware(ep);
 
-  const baseName = ep.display_name || id;
-  const subBits = [];
-  if (ep.hostname) subBits.push(escapeHtml(ep.hostname));
-  if (ep.hostname !== id) subBits.push(`<span class="host-id-faint">${escapeHtml(id)}</span>`);
-  const sub = subBits.join(" · ") || `<span class="host-id-faint">${escapeHtml(id)}</span>`;
+  const baseName = ep.display_name || ep.hostname || "(unnamed host)";
+  const sub = ep.hostname && ep.hostname !== ep.display_name ? escapeHtml(ep.hostname) : "";
 
   const vlanInfo = ep.management_vlan ? state.vlans[ep.management_vlan] : null;
   const vlanLabel = ep.management_vlan
@@ -5212,10 +5403,12 @@ function hostDetailCard(id) {
   });
 
   const footParts = [];
-  if (cred) footParts.push(`<span>cred <b>${escapeHtml(ep.credential_ref)}</b> · ${escapeHtml(cred.username || "")} ${credentialTypeChip(cred.type || "shell")}</span>`);
+  if (cred) footParts.push(`<span>cred <b>${escapeHtml(cred.username || "(no username)")}</b> ${credentialTypeChip(cred.type || "shell")}</span>`);
   if (ep.hosted_on) {
+    const parent = state.hosts[ep.hosted_on];
+    const parentLabel = parent ? (parent.display_name || parent.hostname || ep.hosted_on) : ep.hosted_on;
     const vmBit = ep.vm_id ? ` (VMID ${escapeHtml(ep.vm_id)})` : "";
-    footParts.push(`<span>hosted on <b>${escapeHtml(ep.hosted_on)}</b>${vmBit}</span>`);
+    footParts.push(`<span>hosted on <b>${escapeHtml(parentLabel)}</b>${vmBit}</span>`);
   } else if (ep.vm_id) {
     footParts.push(`<span>VMID <b>${escapeHtml(ep.vm_id)}</b></span>`);
   }
@@ -5353,12 +5546,14 @@ function openHostForm(id = null) {
 
   const body = document.createElement("div");
 
-  body.appendChild(field({
-    label: "Host ID",
-    id: "ep_id",
-    html: `<input id="ep_id" type="text" value="${escapeHtml(initialId)}" placeholder="auto from name if empty" ${isEdit ? "readonly" : ""}>`,
-    help: isEdit ? "ID cannot be changed after creation." : "Optional. Leave blank to auto-generate from name."
-  }));
+  if (isEdit) {
+    body.appendChild(field({
+      label: "Host ID",
+      id: "ep_id",
+      html: `<input id="ep_id" type="text" value="${escapeHtml(initialId)}" readonly>`,
+      help: "Auto-generated, readonly."
+    }));
+  }
 
   const row1 = document.createElement("div");
   row1.className = "row r-2";
@@ -5547,9 +5742,7 @@ function openHostForm(id = null) {
       if (!dname) { toast("Display name is required", "error"); return false; }
       if (mip && !isValidIp(mip)) { toast("Mgmt IP is not a valid IPv4 address", "error"); return false; }
 
-      let useId = $("#ep_id", body).value.trim();
-      if (!useId) useId = uniqueId(hostname || dname, isEdit ? Object.fromEntries(Object.entries(state.hosts).filter(([k]) => k !== id)) : state.hosts);
-      if (!isEdit && state.hosts[useId]) { toast(`Host id '${useId}' already exists`, "error"); return false; }
+      const useId = isEdit ? id : randomId("h", state.hosts);
 
       const next = isEdit ? state.hosts[id] : {};
       next.kind = kind;
@@ -5873,12 +6066,14 @@ function openServiceForm(epId, idx = null) {
 
   const body = document.createElement("div");
 
-  body.appendChild(field({
-    label: "Service ID",
-    id: "sv_id",
-    html: `<input id="sv_id" type="text" value="${escapeHtml(initialId)}" placeholder="auto from name if empty" ${isEdit ? "readonly" : ""}>`,
-    help: isEdit ? "ID cannot be changed after creation." : "Optional. Stable identifier unique within this host. Auto-generated from name if blank."
-  }));
+  if (isEdit) {
+    body.appendChild(field({
+      label: "Service ID",
+      id: "sv_id",
+      html: `<input id="sv_id" type="text" value="${escapeHtml(initialId)}" readonly>`,
+      help: "Auto-generated, readonly."
+    }));
+  }
 
   const row1 = document.createElement("div");
   row1.className = "row r-2";
@@ -5962,11 +6157,9 @@ function openServiceForm(epId, idx = null) {
       if (isEdit) {
         useId = ep.services[idx].id || initialId;
       } else {
-        const requested = $("#sv_id", body).value.trim();
         const used = {};
         ep.services.forEach(svc => { if (svc.id) used[svc.id] = true; });
-        useId = requested || uniqueId(name, used);
-        if (used[useId]) { toast(`Service id '${useId}' already exists on this host`, "error"); return false; }
+        useId = randomId("s", used);
       }
 
       const cat = $("#sv_cat", body).value;
@@ -6191,13 +6384,17 @@ function renderServices(root) {
   filtered.forEach(({ epId, ep, s, idx }) => {
     const card = document.createElement("div");
     card.className = "svc-card";
+    card.dataset.hostId = epId;
+    card.dataset.svcId = s.id;
     const portText = `${s.protocol || ""}${s.port ? ":" + s.port : ""}`;
-    const hasCred = s.credential_ref && state.credentials[s.credential_ref];
+    const hostEp = state.hosts[epId];
+    const hostLabel = hostEp ? (hostEp.display_name || hostEp.hostname || epId) : epId;
+    const credEntry = s.credential_ref ? state.credentials[s.credential_ref] : null;
     const footParts = [];
     footParts.push(categoryChip(s.category));
-    footParts.push(`<span>on <b>${escapeHtml(epId)}</b></span>`);
+    footParts.push(`<span>on <b>${escapeHtml(hostLabel)}</b></span>`);
     if (s.listen_ip) footParts.push(`<span>listen <b>${escapeHtml(s.listen_ip)}</b></span>`);
-    if (hasCred) footParts.push(`<span>cred <b>${escapeHtml(s.credential_ref)}</b></span>`);
+    if (credEntry) footParts.push(`<span>cred <b>${escapeHtml(credEntry.username || "(no username)")}</b></span>`);
     const foot = footParts
       .map((part, idx2) => idx2 === 0 ? part : `<span class="dot"></span>${part}`)
       .join("");
@@ -6319,6 +6516,7 @@ function credentialCard(id) {
   const links = findCredentialLinks(id);
   const card = document.createElement("div");
   card.className = "cred-card";
+  card.dataset.credId = id;
   const revealed = revealedCreds.has(id);
   const erProvider = c.external_ref?.provider || "";
   const erId = c.external_ref?.id || "";
@@ -6363,9 +6561,7 @@ function credentialCard(id) {
 
   card.innerHTML = `
     <div class="cc-top">
-      <span class="cc-id">${escapeHtml(id)}</span>
-      <span class="cc-arrow">·</span>
-      <span class="cc-user${c.username ? "" : " is-empty"}">${escapeHtml(c.username || "no username")}</span>
+      <span class="cc-id${c.username ? "" : " is-empty"}">${escapeHtml(c.username || "(no username)")}</span>
       <div class="cc-actions">
         ${credentialTypeChip(c.type || "shell")}
         ${hasExternalRef ? `<span class="chip success">vault</span>` : ""}
@@ -6423,12 +6619,14 @@ async function openCredentialForm(id = null) {
   const existingLinks = isEdit ? findCredentialLinks(id) : { hosts: [], services: [] };
 
   const body = document.createElement("div");
-  body.appendChild(field({
-    label: "Credential ID",
-    id: "cr_id",
-    html: `<input id="cr_id" type="text" value="${escapeHtml(initialId)}" placeholder="cred_router_admin" ${isEdit ? "readonly" : ""}>`,
-    help: isEdit ? "ID cannot be changed after creation." : "Optional. Auto-generated from username if blank."
-  }));
+  if (isEdit) {
+    body.appendChild(field({
+      label: "Credential ID",
+      id: "cr_id",
+      html: `<input id="cr_id" type="text" value="${escapeHtml(initialId)}" readonly>`,
+      help: "Auto-generated, readonly."
+    }));
+  }
   const row1 = document.createElement("div");
   row1.className = "row r-2";
   row1.appendChild(field({
@@ -6516,9 +6714,7 @@ async function openCredentialForm(id = null) {
       const notes = $("#cr_notes", body).value.trim();
       if (!user) { toast("Username is required", "error"); return false; }
 
-      let useId = $("#cr_id", body).value.trim();
-      if (!useId) useId = newCredId(user, isEdit ? Object.fromEntries(Object.entries(state.credentials).filter(([k]) => k !== id)) : state.credentials);
-      if (!isEdit && state.credentials[useId]) { toast(`Credential id '${useId}' already exists`, "error"); return false; }
+      const useId = isEdit ? id : randomId("c", state.credentials);
 
       let storedPassword;
       if (Crypto.isEncryptedSession()) {
@@ -6705,8 +6901,7 @@ function renderMapNetworks(root) {
       <div class="map-row-head">
         <div class="map-title-block">
           <button class="map-title" type="button" data-action="edit-vlan" data-vlan-id="${escapeHtml(id)}">
-            <strong>${escapeHtml(id)}</strong>
-            ${v.name ? `<span class="card-sub">${escapeHtml(v.name)}</span>` : ""}
+            <strong>${escapeHtml(v.name || "(unnamed VLAN)")}</strong>
             ${v.tag != null ? `<span class="map-tag">tag ${escapeHtml(String(v.tag))}</span>` : ""}
           </button>
           ${gw ? `<div class="map-subline">${escapeHtml(gw)}</div>` : `<div class="map-subline muted">no gateway</div>`}
@@ -7350,7 +7545,7 @@ function openImportSingleChooser(parsed) {
   `;
   asNew.addEventListener("click", () => {
     modalEl.close();
-    const id = uniqueNetworkId(incomingName, data.networks);
+    const id = randomId("n", data.networks);
     data.networks[id] = incoming;
     data.activeNetworkId = id;
     state = data.networks[id];

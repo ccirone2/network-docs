@@ -72,11 +72,16 @@ TIER2_PATHS: tuple[str, ...] = (
     "hosts.*.hardware_revision",
     "hosts.*.identifiers.*.value",
     "hosts.*.identifiers.*.label",
+    "hosts.*.interfaces.*.name",
+    "hosts.*.interfaces.*.parent",
     "hosts.*.interfaces.*.mac",
     "hosts.*.interfaces.*.ip_addresses.*.address",
+    "hosts.*.interfaces.*.connected_to.interface",
+    "hosts.*.interfaces.*.connected_to.via_bridge",
     "hosts.*.services.*.name",
     "hosts.*.services.*.display_name",
     "hosts.*.services.*.listen_ip",
+    "hosts.*.services.*.port",
     "hosts.*.services.*.url",
     "hosts.*.services.*.notes",
     "hosts.*.links.*.label",
@@ -164,10 +169,16 @@ def encrypt_paths(data: dict, paths: Iterable[str], aesgcm: AESGCM) -> None:
     """Mutate `data` in place: for each network record, encrypt the value at
     every leaf reached by each dotted path. Empty strings are left as-is
     (the empty string is not a secret); existing {iv, ct} blobs are passed
-    through. Non-string values at a leaf are left unchanged."""
+    through. Numeric leaves (e.g. service.port stored as int) are stringified
+    before encryption — they round-trip as strings, which the schema accepts
+    (port is `int | string`). Booleans and nulls are never encrypted."""
     def encrypt_leaf(_parent: Any, value: Any) -> Any:
         if _is_blob(value):
             return value
+        if value is None or isinstance(value, bool):
+            return value
+        if isinstance(value, (int, float)):
+            return encrypt_value(aesgcm, str(value))
         if isinstance(value, str) and value != "":
             return encrypt_value(aesgcm, value)
         return value
