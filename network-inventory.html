@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; base-uri 'self'; form-action 'none'; frame-ancestors 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; base-uri 'self'; form-action 'none'">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="light">
 <meta name="theme-color" content="#0f172a">
@@ -8490,11 +8490,13 @@ function processImportedJson(parsed, onCommitted) {
             cipher: parsed.cipher,
             encrypted_fields: parsed.encrypted_fields
           });
-          try {
-            continueImportFromParsed(parsed.data, onCommitted);
-          } catch (err) {
-            toast("Import failed: " + err.message, "error");
-          }
+          setTimeout(() => {
+            try {
+              continueImportFromParsed(parsed.data, onCommitted);
+            } catch (err) {
+              toast("Import failed: " + err.message, "error");
+            }
+          }, 0);
           return true;
         } catch {
           Crypto.lock();
