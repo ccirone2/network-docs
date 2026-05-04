@@ -1299,6 +1299,34 @@
     display: flex; flex-direction: column; gap: var(--space-2);
     align-items: center;
   }
+  body.app-locked nav.tabs { display: none; }
+  body.app-locked .topbar-actions #btn-export,
+  body.app-locked .topbar-actions #btn-save,
+  body.app-locked .topbar-actions #btn-save-as { display: none; }
+  .lock-gate {
+    display: flex; align-items: center; justify-content: center;
+    min-height: 60vh; padding: var(--space-6);
+  }
+  .lock-gate-panel {
+    width: 100%; max-width: 360px;
+    padding: var(--space-6);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+    text-align: center;
+  }
+  .lock-gate-panel h2 { margin: 0 0 var(--space-2); font-size: 20px; }
+  .lock-gate-panel p { margin: 0 0 var(--space-4); font-size: 13px; }
+  .lock-gate-panel input[type="password"] {
+    width: 100%; padding: var(--space-2) var(--space-3);
+    border: 1px solid var(--border); border-radius: var(--radius-md);
+    font-size: 14px; margin-bottom: var(--space-3);
+  }
+  .lock-gate-panel .lock-error {
+    color: var(--danger); font-size: 13px; margin-bottom: var(--space-2);
+  }
+  .lock-gate-panel button { width: 100%; }
   .toast {
     pointer-events: auto;
     background: var(--text);
@@ -2399,48 +2427,135 @@
     "length": 256
   },
   "encrypted_fields": [
-    "credentials.*.password"
+    "credentials.*.password",
+    "network.name",
+    "network.description",
+    "vlans.*.name",
+    "vlans.*.gateway_ip",
+    "vlans.*.dhcp_range_start",
+    "vlans.*.dhcp_range_end",
+    "hosts.*.display_name",
+    "hosts.*.hostname",
+    "hosts.*.aliases.*",
+    "hosts.*.notes",
+    "hosts.*.management_ip",
+    "hosts.*.vm_id",
+    "hosts.*.software.name",
+    "hosts.*.software.version",
+    "hosts.*.software.notes",
+    "hosts.*.manufacturer",
+    "hosts.*.model",
+    "hosts.*.hardware_revision",
+    "hosts.*.identifiers.*.value",
+    "hosts.*.identifiers.*.label",
+    "hosts.*.interfaces.*.name",
+    "hosts.*.interfaces.*.parent",
+    "hosts.*.interfaces.*.mac",
+    "hosts.*.interfaces.*.ip_addresses.*.address",
+    "hosts.*.interfaces.*.connected_to.interface",
+    "hosts.*.interfaces.*.connected_to.via_bridge",
+    "hosts.*.services.*.name",
+    "hosts.*.services.*.display_name",
+    "hosts.*.services.*.listen_ip",
+    "hosts.*.services.*.port",
+    "hosts.*.services.*.url",
+    "hosts.*.services.*.notes",
+    "hosts.*.links.*.label",
+    "hosts.*.links.*.url",
+    "hosts.*.peripherals.*.usb_vid_pid",
+    "hosts.*.peripherals.*.description",
+    "credentials.*.username",
+    "credentials.*.notes",
+    "credentials.*.external_ref.id"
   ],
   "data": {
     "schemaVersion": 0,
     "networks": {
       "n_a01": {
         "network": {
-          "name": "Homelab",
-          "description": "Fully-populated fixture exercising every record type and field."
+          "name": {
+            "iv": "zGDL1BV78g9EzFtN",
+            "ct": "BlQqdnsfj081PLogdlEjjzChMXkoSSg="
+          },
+          "description": {
+            "iv": "oTeZ6FbNhyYNoOka",
+            "ct": "vxA8g02Q66v168TSYzS2/wMFMmIJUI44178qvKJbrrIMO05hlRSungW16KDDsw1xP8w1627XCh3tQ+fRYe0jvaHXq/Mrr1LC5G2bibMFJA=="
+          }
         },
         "vlans": {
           "v_a01": {
-            "name": "LAN",
+            "name": {
+              "iv": "iFbZl8PWfnqfcOHz",
+              "ct": "A4neBkGOzVEYjCNVU676XsKqlw=="
+            },
             "tag": 10,
-            "gateway_ip": "192.168.10.1",
+            "gateway_ip": {
+              "iv": "oLhRNT9Cwamsq6N4",
+              "ct": "CwBi7jMilcqx5W23EVUW3xL8zr+hOLzbP1M4UQ=="
+            },
             "subnet_prefix": 24,
             "dhcp": true,
-            "dhcp_range_start": "192.168.10.100",
-            "dhcp_range_end": "192.168.10.200"
+            "dhcp_range_start": {
+              "iv": "Tswv1Fn3qMGo6U23",
+              "ct": "89/Go49q3QTQEojCjhFa1zvFNN5Bug7Tub3H9oKz"
+            },
+            "dhcp_range_end": {
+              "iv": "li6+PSmMOdfSjX6R",
+              "ct": "26y3p1peRvtX5xFQVMEEJ8xrZN+kXpDJyl32EMnl"
+            }
           },
           "v_a02": {
-            "name": "GUEST",
+            "name": {
+              "iv": "oRbIkBZxEPA9Xwpw",
+              "ct": "7QNlPQPhMnEUl2nvOv13ncvQUu24"
+            },
             "tag": 20,
-            "gateway_ip": "192.168.20.1",
+            "gateway_ip": {
+              "iv": "XLqkw/b0Wbyhglz9",
+              "ct": "93/gOIjEknM0YLQk9aTWm2kXzDxt+V7786RSig=="
+            },
             "subnet_prefix": 24,
             "dhcp": true,
-            "dhcp_range_start": "192.168.20.100",
-            "dhcp_range_end": "192.168.20.200"
+            "dhcp_range_start": {
+              "iv": "RPgmTrRrkfB45Qv7",
+              "ct": "KrFslKbJ7J7xx37ESUEgWGzmuEhL9nR+M2WsgihW"
+            },
+            "dhcp_range_end": {
+              "iv": "MT226f0yoaqM5LBv",
+              "ct": "p2Sek9lEqPHyda/ybaNvd0iaXCVKYc8TuONISsz6"
+            }
           },
           "v_a03": {
-            "name": "IOT",
+            "name": {
+              "iv": "qfgnYJ5yjGNpCdEq",
+              "ct": "CL6JNnXed/fXG/hacEhc5hpFkg=="
+            },
             "tag": 30,
-            "gateway_ip": "192.168.30.1",
+            "gateway_ip": {
+              "iv": "0ULZeIV3usqzEIp2",
+              "ct": "JlslnGWL358JWFR6A+0ar97Lv5JJHdR7jDRYIA=="
+            },
             "subnet_prefix": 24,
             "dhcp": true,
-            "dhcp_range_start": "192.168.30.50",
-            "dhcp_range_end": "192.168.30.250"
+            "dhcp_range_start": {
+              "iv": "8QWBjdkW8AagvL5d",
+              "ct": "n5CqmF/818matMFf8SjWvry3OIr2At6FZhWATWc="
+            },
+            "dhcp_range_end": {
+              "iv": "ZPBuaUJakhqJPvU1",
+              "ct": "9TJJjZ1pbSN+0qB9cyFI89Pq7i3GnD/lgDrIvsb1"
+            }
           },
           "v_a04": {
-            "name": "MGMT",
+            "name": {
+              "iv": "3zGZzpQOM/n8iOSr",
+              "ct": "4PNTNBLdY0uSLZ5fjg3ZJPFD1u4="
+            },
             "tag": 100,
-            "gateway_ip": "192.168.100.1",
+            "gateway_ip": {
+              "iv": "sPCOFV+NWK2qG2Tv",
+              "ct": "Aw3EiZc3Ql7FVQB9s+0te556SIODm99JnCx7eIc="
+            },
             "subnet_prefix": 24,
             "dhcp": false,
             "dhcp_range_start": "",
@@ -2451,40 +2566,85 @@
           "h_a01": {
             "kind": "physical",
             "role": "router",
-            "display_name": "Router",
-            "hostname": "router-01",
+            "display_name": {
+              "iv": "nRJ75gHNqqK0KdsT",
+              "ct": "aPXjHEBD/33xfchvSNV9BkvRrt2rFw=="
+            },
+            "hostname": {
+              "iv": "B93ej7W4wovcRzvx",
+              "ct": "wYe+OL5QZquvnU4GyZ0IbABn45GNwWxywQ=="
+            },
             "aliases": [
-              "gateway",
-              "edge-router"
+              {
+                "iv": "PjprLzsWhSbUcmIv",
+                "ct": "XRsg3bG7DUguQ4I9zg7PRUniBHi0u9I="
+              },
+              {
+                "iv": "fn/PbouXPMjg5pkz",
+                "ct": "I+bUbqYlL5XRhf34MnzjI4v0/35YnmluRp3/"
+              }
             ],
             "identifiers": [
               {
                 "kind": "serial",
-                "value": "RTR-SN-12345",
-                "label": "chassis serial"
+                "value": {
+                  "iv": "bVykVZvQ1/Nw6x5x",
+                  "ct": "1he5ZZQ1fMTHi7UtfBy/gVs1tdDU5GJKL//qfA=="
+                },
+                "label": {
+                  "iv": "xCdIL9uNE7dq/VUh",
+                  "ct": "HXdpaoP4sXXX6tlDwIT3dMSfY2yL4AzymgasEVmO"
+                }
               }
             ],
             "hosted_on": "",
             "vm_id": "",
             "software": {
-              "name": "pfSense",
-              "version": "2.7.2",
+              "name": {
+                "iv": "Ezp4M/zZ0geJjsrH",
+                "ct": "3rCf1dTkkM9i1OkC3HLCQft21FWxPPk="
+              },
+              "version": {
+                "iv": "QY7I0lZXOakdn/F2",
+                "ct": "QSj2lAF6yWzIpnx1U9nmn2tX1jMe"
+              },
               "kernel": "FreeBSD 14.0",
               "edition": "Community Edition",
-              "notes": "Bare-metal install"
+              "notes": {
+                "iv": "6fCxUmQj2cp47fAr",
+                "ct": "Rqk68Vnd8ivwmv29rEM5bnOUEMp3vZWy6WNO1dhtg9Q6Kw=="
+              }
             },
-            "manufacturer": "Protectli",
-            "model": "FW6B",
-            "hardware_revision": "Rev A2",
+            "manufacturer": {
+              "iv": "yYe3B4mo8vvRUmdW",
+              "ct": "kBI/R6QUNXjzEDEfl4yFEpIO7GjXhrY7VQ=="
+            },
+            "model": {
+              "iv": "TCTjM1lwj+aqWpX8",
+              "ct": "aikksIOe6mt9deVewMA/SbWfiqw="
+            },
+            "hardware_revision": {
+              "iv": "G4aIUSrOodKNuuva",
+              "ct": "x/74LDLzsmfkgS3NGe5+hNkB36TEbw=="
+            },
             "management_vlan": "v_a04",
-            "management_ip": "192.168.100.1",
+            "management_ip": {
+              "iv": "UtvB9EXSitXswL28",
+              "ct": "ThLclRAHnHxxfZe3NXMfqZwvrffSqUJ2+UFON0Q="
+            },
             "credential_ref": "c_a01",
             "interfaces": [
               {
-                "name": "wan",
+                "name": {
+                  "iv": "bJCjJdbK5SnvpMPa",
+                  "ct": "Q3L9oU1XHsgFqF1RgW2pM5hSXg=="
+                },
                 "type": "fiber",
                 "mode": "access",
-                "mac": "aa:bb:cc:00:00:01",
+                "mac": {
+                  "iv": "9ElrWcBHfCsufPaR",
+                  "ct": "cA4fXS1QQniNBDCHWXmzy6YBGqPNVbNEB/gWKDfllHrQ"
+                },
                 "parent": "",
                 "connected_to": {
                   "host_id": "",
@@ -2497,20 +2657,32 @@
                 "allowed_vlans": [],
                 "ip_addresses": [
                   {
-                    "address": "203.0.113.5",
+                    "address": {
+                      "iv": "CQsdIcM5xWwPfP0b",
+                      "ct": "ocnWHyvL/EOl3mDAV4j1HgzJKqRq+TC+9/uf"
+                    },
                     "prefix": 30
                   }
                 ]
               },
               {
-                "name": "lan_trunk",
+                "name": {
+                  "iv": "PyP/DaNvlPiYTXSv",
+                  "ct": "srfb4zfULjZ/iIYo6ZH35g4/J8F0MyWDAQ=="
+                },
                 "type": "ethernet",
                 "mode": "trunk",
-                "mac": "aa:bb:cc:00:00:02",
+                "mac": {
+                  "iv": "ZMYuLmkYIpbsUhNy",
+                  "ct": "BHVBkczT7yr97CajrnRKYHOXbNh8Ec5FNoX028Gd9cN/"
+                },
                 "parent": "",
                 "connected_to": {
                   "host_id": "h_a02",
-                  "interface": "port_01",
+                  "interface": {
+                    "iv": "arPUUn9a5AzcI8Ck",
+                    "ct": "YGekf3PhhDekEmtrLpgtAjE21VfI1TM="
+                  },
                   "via_bridge": "",
                   "via_tag": null
                 },
@@ -2524,25 +2696,40 @@
                 ],
                 "ip_addresses": [
                   {
-                    "address": "192.168.10.1",
+                    "address": {
+                      "iv": "fOn35imvadJvoJ2J",
+                      "ct": "5hSgnId6H83XU1if5PIcGSRUpI2j9AOS8vDx/Q=="
+                    },
                     "prefix": 24
                   },
                   {
-                    "address": "192.168.20.1",
+                    "address": {
+                      "iv": "XLHwdrWt56/ZTBP2",
+                      "ct": "byYnU5a3CU7E4eaFkzZOmrtyCymHYz7lnO6H1A=="
+                    },
                     "prefix": 24
                   },
                   {
-                    "address": "192.168.30.1",
+                    "address": {
+                      "iv": "A5sedlWUPccFirtI",
+                      "ct": "fktnBdFbCtRvTmb3yR+jQo++0YS6X9veKrv9AA=="
+                    },
                     "prefix": 24
                   },
                   {
-                    "address": "192.168.100.1",
+                    "address": {
+                      "iv": "mWo6vz7qWnMBfUia",
+                      "ct": "LBatKfolr+PE1Yg5lAxwR9XqGpY0OlB+FxYxpjs="
+                    },
                     "prefix": 24
                   }
                 ]
               },
               {
-                "name": "wg0",
+                "name": {
+                  "iv": "gS3jUjda0crVOrb/",
+                  "ct": "OxnQoebRqlgNrq9q29F+MEBCCA=="
+                },
                 "type": "tunnel",
                 "mode": "access",
                 "mac": "",
@@ -2558,7 +2745,10 @@
                 "allowed_vlans": [],
                 "ip_addresses": [
                   {
-                    "address": "10.7.0.1",
+                    "address": {
+                      "iv": "fsQT+2x8doDmgNIE",
+                      "ct": "gW5/oEubtEAKEiRE2dYMWAEsiDV3hRRw"
+                    },
                     "prefix": 24
                   }
                 ]
@@ -2567,31 +2757,64 @@
             "services": [
               {
                 "id": "s_a01",
-                "name": "web_admin",
-                "display_name": "Router Admin UI",
+                "name": {
+                  "iv": "FgaWO74j2OUWmU4I",
+                  "ct": "8orxgV4YY+fzopvKUtIkMgdxIdyv2ZTSyA=="
+                },
+                "display_name": {
+                  "iv": "pdsMPlx9oTa+vDFy",
+                  "ct": "Z8ex1t2Jec+27laBpyhpgFyy6Kg+CP0hRu1qCyjE5A=="
+                },
                 "category": "management",
                 "protocol": "https",
-                "listen_ip": "192.168.100.1",
-                "port": 443,
-                "url": "https://192.168.100.1/",
+                "listen_ip": {
+                  "iv": "jSyfQ+NaAWzjM3Nr",
+                  "ct": "xVYJFeHTHhX75GvDtS09AMuJmsV8PYXmYUuC7YY="
+                },
+                "port": {
+                  "iv": "xUFKd5d5GIiylTVd",
+                  "ct": "n2gIeUgnbqTPiQGcsFi+trVCNw=="
+                },
+                "url": {
+                  "iv": "m2AQq9aIQId49Jbk",
+                  "ct": "WclFHsfOPJH90UwhqxByol4KMwAnJ17sVLjyiniRa+6Mvg7iaWM="
+                },
                 "credential_ref": "c_a01"
               },
               {
                 "id": "s_a02",
-                "name": "ssh",
-                "display_name": "SSH",
+                "name": {
+                  "iv": "4g487Ltd8gxGzM2f",
+                  "ct": "55YxNv0DJOHhl9NNv0Kp/wU7SA=="
+                },
+                "display_name": {
+                  "iv": "tvSKe4usLplGKOVG",
+                  "ct": "XrR85Ibv5v6c2oqe3k8mq8NfNQ=="
+                },
                 "category": "management",
                 "protocol": "ssh",
-                "listen_ip": "192.168.100.1",
-                "port": 22,
+                "listen_ip": {
+                  "iv": "MU8J4tdbgBdalFf3",
+                  "ct": "MZXtO1vw3FRR2lFPnXyv3bpForo9bYkbRGKxKKY="
+                },
+                "port": {
+                  "iv": "2KRdmlnYtVt1Mid6",
+                  "ct": "41nMKm96OPgxEb1YaWcw5QQ1"
+                },
                 "url": "",
                 "credential_ref": "c_a02"
               }
             ],
             "links": [
               {
-                "label": "Vendor docs",
-                "url": "https://protectli.com/"
+                "label": {
+                  "iv": "Lw8Cd8v16pWNXdaR",
+                  "ct": "YYUVOTsisSVYc6hzU6UQ6Csg0TwLxZLEEVcT"
+                },
+                "url": {
+                  "iv": "7Gu8Vt8q5nF+M9ZP",
+                  "ct": "OWZDsK72odXtguCaveiilatgQ0TMlmGPb/Xab0ELc0KeWRySPZU="
+                }
               }
             ],
             "peripherals": []
@@ -2599,35 +2822,62 @@
           "h_a02": {
             "kind": "physical",
             "role": "switch",
-            "display_name": "Core Switch",
-            "hostname": "switch-01",
+            "display_name": {
+              "iv": "eoAad739Hz+Oxa87",
+              "ct": "A6VCFYDw3QVRadcv8CWHWSO08Igg8f4RatXi"
+            },
+            "hostname": {
+              "iv": "vwQxHt/mM/X1UHrL",
+              "ct": "fiQE9euEv5U6XeC8rCgAq89ARQsrKJMGUg=="
+            },
             "aliases": [],
             "identifiers": [],
             "hosted_on": "",
             "vm_id": "",
             "software": {
-              "name": "GS308E firmware",
-              "version": "V1.0.1.9",
+              "name": {
+                "iv": "gEmYYu0DA4NHjokp",
+                "ct": "k5CCW3IzMYeaZdbBOG6o8Fk52t60ywvFuzYmVDs4ug=="
+              },
+              "version": {
+                "iv": "zAJVCdfBjpLoMFxz",
+                "ct": "1ecjFzb+iiaX2K3lKvRmAXTUlVFF43/U"
+              },
               "kernel": "",
               "edition": "",
               "notes": ""
             },
-            "manufacturer": "Netgear",
-            "model": "GS308E",
+            "manufacturer": {
+              "iv": "0VC5oTKFVeu6l+zX",
+              "ct": "I5wqnDWYsoq/gJC+ghhDyXwllxONh54="
+            },
+            "model": {
+              "iv": "CovH/0RhfeW3F/uO",
+              "ct": "9nU4OAEMua4QruyYZIILapE1RLpN6w=="
+            },
             "hardware_revision": "",
             "management_vlan": "v_a04",
-            "management_ip": "192.168.100.2",
+            "management_ip": {
+              "iv": "w/ipVD2dCS4g7e7p",
+              "ct": "djX36xAuIew2jwwRLad3o5sXKvYp3ySzlVVupfw="
+            },
             "credential_ref": "c_a03",
             "interfaces": [
               {
-                "name": "port_01",
+                "name": {
+                  "iv": "0PzlqpJtOvMBl057",
+                  "ct": "fJcj0hdx4r1exCKnGU74zud7ii0nFKQ="
+                },
                 "type": "ethernet",
                 "mode": "trunk",
                 "mac": "",
                 "parent": "",
                 "connected_to": {
                   "host_id": "h_a01",
-                  "interface": "lan_trunk",
+                  "interface": {
+                    "iv": "cpAm16ibb7MCWQ1R",
+                    "ct": "eMWP3Wh8a4ugrjDk8jP5FXzuwONE9FbdaQ=="
+                  },
                   "via_bridge": "",
                   "via_tag": null
                 },
@@ -2642,14 +2892,20 @@
                 "ip_addresses": []
               },
               {
-                "name": "port_02",
+                "name": {
+                  "iv": "okxcBjZyUNraxVe5",
+                  "ct": "dXbcd83Ix9rXjEXWTpoxqvVNwnO8JcA="
+                },
                 "type": "ethernet",
                 "mode": "access",
                 "mac": "",
                 "parent": "",
                 "connected_to": {
                   "host_id": "h_a03",
-                  "interface": "eth0",
+                  "interface": {
+                    "iv": "fCc9evhBX3Bl8lig",
+                    "ct": "onAzKwAtskDjwIGkmWVRt+F03KQ="
+                  },
                   "via_bridge": "",
                   "via_tag": null
                 },
@@ -2662,13 +2918,28 @@
             "services": [
               {
                 "id": "s_a03",
-                "name": "web_admin",
-                "display_name": "Switch Web UI",
+                "name": {
+                  "iv": "8Vjn7u62iPSPRIaX",
+                  "ct": "j5rhuaEKKvnbE4nz8WTIRDSdGtxOWuz15A=="
+                },
+                "display_name": {
+                  "iv": "7KTFefBmSgKa2SqC",
+                  "ct": "JwELK6mRg1om49sO3PS7mGDmaWp4oODTPeTeIKw="
+                },
                 "category": "management",
                 "protocol": "http",
-                "listen_ip": "192.168.100.2",
-                "port": 80,
-                "url": "http://192.168.100.2/",
+                "listen_ip": {
+                  "iv": "IRLtBHR+eV416K8h",
+                  "ct": "IM7pR8rOCtDV+WzDvj8dor05utphJnk/iWEtMf8="
+                },
+                "port": {
+                  "iv": "WtRjbmzsXV+sT3ir",
+                  "ct": "6Zhou4D+ldslVq7sHaDOUBhC"
+                },
+                "url": {
+                  "iv": "0boTcHlmBVpH/7ca",
+                  "ct": "vf1i4PHp5hVpKtUp7SZ3cIGAAGfF8wjqwmygPSmKyB6w4pV3yg=="
+                },
                 "credential_ref": "c_a03"
               }
             ],
@@ -2678,44 +2949,83 @@
           "h_a03": {
             "kind": "physical",
             "role": "hypervisor",
-            "display_name": "Hypervisor",
-            "hostname": "pve-01",
+            "display_name": {
+              "iv": "HmYcZR6vkDTQf/AF",
+              "ct": "lD5uBvQIFvcjEqfU1OTiQHoPMur5S+wLu7c="
+            },
+            "hostname": {
+              "iv": "5hvrrl+TRPCpHI+i",
+              "ct": "m/G1DiGVZ39KN/qeMHCqtmLWrz1KLQ=="
+            },
             "aliases": [
-              "pve"
+              {
+                "iv": "3k/3btsMo7IZHjwS",
+                "ct": "OK3c0ZGDnDRpf3U8jAdxdiSGMg=="
+              }
             ],
             "identifiers": [
               {
                 "kind": "serial",
-                "value": "PVE-SN-7788",
+                "value": {
+                  "iv": "hxjrp4EWh45mOi7q",
+                  "ct": "5rVy6J9M2xKv/zP96DuEerxFSL7f5RzXYxTo"
+                },
                 "label": ""
               }
             ],
             "hosted_on": "",
             "vm_id": "",
             "software": {
-              "name": "Proxmox VE",
-              "version": "8.1",
+              "name": {
+                "iv": "7YAneS7ENIN+BmXH",
+                "ct": "XIxOfgH9aBq3EyEBQneXxl1WJDMUONzXJhM="
+              },
+              "version": {
+                "iv": "WTB57Ko3rZgDNxKF",
+                "ct": "UNoW8hADkswmRvfdGZb7NVWG2Q=="
+              },
               "kernel": "6.5.11-7-pve",
               "edition": "Debian 12 bookworm",
               "notes": ""
             },
-            "manufacturer": "Dell",
-            "model": "OptiPlex 7060",
+            "manufacturer": {
+              "iv": "Gse1b+R1pR7NfGqS",
+              "ct": "thM/MrZ+VqrpUysD92zZ47RVibE="
+            },
+            "model": {
+              "iv": "m2tpenDsdQAmYJ4a",
+              "ct": "b2o2ODFzzMY+XnU437HkwKQRqz13/s9tBxyOn78="
+            },
             "hardware_revision": "",
             "management_vlan": "v_a04",
-            "management_ip": "192.168.100.10",
+            "management_ip": {
+              "iv": "10FB8Yov6u4v23n4",
+              "ct": "vPnPu1fMvPRFzaslbXiwh1KgbasMUg1qsE5Yoho/"
+            },
             "credential_ref": "c_a04",
             "interfaces": [
               {
-                "name": "eth0",
+                "name": {
+                  "iv": "aJw5r1ArK79Wfy1P",
+                  "ct": "8UsTEHIsj2rS3YSPykKSXPkAnTo="
+                },
                 "type": "ethernet",
                 "mode": "access",
-                "mac": "aa:bb:cc:11:11:01",
+                "mac": {
+                  "iv": "AbiCLTf6gmGUWJUn",
+                  "ct": "Z2yn6VwNgHIJIXmFhP3goUUJq2Z5rtdwQfvEHJEcAcib"
+                },
                 "parent": "",
                 "connected_to": {
                   "host_id": "h_a02",
-                  "interface": "port_02",
-                  "via_bridge": "vmbr0",
+                  "interface": {
+                    "iv": "tXnWuUgty4/obKL6",
+                    "ct": "+Df3Ejed5c02njtS4SY/9TN1eRX1QHo="
+                  },
+                  "via_bridge": {
+                    "iv": "CLfnmo4b9IZvcsnQ",
+                    "ct": "B4cv24PBTcWvUQ5Z8qnBLLXSh/lo"
+                  },
                   "via_tag": 10
                 },
                 "access_vlan": "v_a01",
@@ -2723,17 +3033,29 @@
                 "allowed_vlans": [],
                 "ip_addresses": [
                   {
-                    "address": "192.168.10.10",
+                    "address": {
+                      "iv": "jpx0ApKcrA9fOlSu",
+                      "ct": "/9/5bhuswJouFC8clzFgW6tvk19E1Cm2vKqUM0U="
+                    },
                     "prefix": 24
                   }
                 ]
               },
               {
-                "name": "vmbr0",
+                "name": {
+                  "iv": "6CPajsDa45gFJk2A",
+                  "ct": "s/F6sIrfc++z8AvIxWzKXe2P3j3b"
+                },
                 "type": "virtual",
                 "mode": "trunk",
-                "mac": "aa:bb:cc:11:11:02",
-                "parent": "eth0",
+                "mac": {
+                  "iv": "Tp7K/0rwkoR4sAmH",
+                  "ct": "59lfAc0tRDUzBq91yCnmyS6I3idfHTL4oacQz+TmHmSP"
+                },
+                "parent": {
+                  "iv": "Cg5cVJdY6Q3TYXab",
+                  "ct": "WUdKHPoq2jscYdlnZ1O6NZfySbY="
+                },
                 "connected_to": {
                   "host_id": "",
                   "interface": "",
@@ -2748,7 +3070,10 @@
                 ],
                 "ip_addresses": [
                   {
-                    "address": "192.168.100.10",
+                    "address": {
+                      "iv": "OLgXkVRIABHXonBn",
+                      "ct": "PnTma+NWO909W3Owz4gqeY68KQxMgYWxrjRiUBlK"
+                    },
                     "prefix": 24
                   }
                 ]
@@ -2757,13 +3082,28 @@
             "services": [
               {
                 "id": "s_a04",
-                "name": "pve_web",
-                "display_name": "Proxmox Web UI",
+                "name": {
+                  "iv": "U67WfehMws7WSCr7",
+                  "ct": "fTtypVe8gD6YLpaHThLd0Gf3MNnheUQ="
+                },
+                "display_name": {
+                  "iv": "EvXu1N6HYImXDs3p",
+                  "ct": "Z6rTvrU0O5jLlLZNv+whuPPNOGmK5ihCL9WKLZpP"
+                },
                 "category": "management",
                 "protocol": "https",
-                "listen_ip": "192.168.100.10",
-                "port": 8006,
-                "url": "https://192.168.100.10:8006/",
+                "listen_ip": {
+                  "iv": "p7c0he2l3rszHXyL",
+                  "ct": "T8VNEcIvxFr0hg6RqsU9rrWNgJB3fIKtqamkMfYX"
+                },
+                "port": {
+                  "iv": "Rkcb+Y1NnSdXeVNG",
+                  "ct": "Zlm6ycCCDPb/vqHNe/HRnzwXgDg="
+                },
+                "url": {
+                  "iv": "RkNWNYUCVqcY4H9a",
+                  "ct": "UtSBYFjT/lZArHxQEAHYvFfUJwVf2k7l+VLQbgmaZWT28l9LSpX2C42iteQ="
+                },
                 "credential_ref": "c_a05"
               }
             ],
@@ -2771,26 +3111,44 @@
             "peripherals": [
               {
                 "slot": "0",
-                "usb_vid_pid": "1d6b:0002",
-                "description": "Linux Foundation 2.0 root hub",
+                "usb_vid_pid": {
+                  "iv": "gIK1bZIQeKMy8NMB",
+                  "ct": "e+Q0bx68KDIcliArSLY32ZPuJxfSh604xw=="
+                },
+                "description": {
+                  "iv": "WwCMaFNhRepNXlKB",
+                  "ct": "eY/gNJCUhg1HTEEpyGlnJve1/wqLf8JMsjAtSm1ZgdlfjefhtWjxi3mhTrfj"
+                },
                 "kind": "usb"
               },
               {
                 "slot": "1",
-                "usb_vid_pid": "0bda:8153",
-                "description": "Realtek USB Ethernet adapter",
+                "usb_vid_pid": {
+                  "iv": "Ugr9OM/jho7B6sEZ",
+                  "ct": "lPRY1gq5YCobi1FN77+zqhOqbk154iiL1w=="
+                },
+                "description": {
+                  "iv": "LVNfe7aGpuk1SkxS",
+                  "ct": "9dyfQzdakU1wX3Xv6hAJW16c+0qLeWSLtjaj3SXwKtQFH+MYZbqyCcmz4D4="
+                },
                 "kind": "usb"
               },
               {
                 "slot": "0",
                 "usb_vid_pid": "",
-                "description": "Coral TPU PCIe accelerator",
+                "description": {
+                  "iv": "T0Z0647aUHNxDhJ0",
+                  "ct": "3raV1S53rMZ71iRFQWk9LAN6FWqYLO1uEpdfWN4NzccW4BmYPQuCj3l6"
+                },
                 "kind": "pci"
               },
               {
                 "slot": "1",
                 "usb_vid_pid": "",
-                "description": "LSI HBA",
+                "description": {
+                  "iv": "0Dz9AU81lEFuN831",
+                  "ct": "Bd4dZyCBxDnpJ1/yJuFy1120BTT1poM="
+                },
                 "kind": "other"
               }
             ]
@@ -2798,15 +3156,30 @@
           "h_a04": {
             "kind": "virtual",
             "role": "iot",
-            "display_name": "Home Assistant",
-            "hostname": "ha",
+            "display_name": {
+              "iv": "ArI9j79lopKHpOQP",
+              "ct": "O5H/w+KSLZn/ikbf7XTUszVQMSvLlrSSdvTeTiTh"
+            },
+            "hostname": {
+              "iv": "PI+c/hmhIYJL/vJo",
+              "ct": "RhjSIa88kA8qq6nDGvM+bNh+"
+            },
             "aliases": [],
             "identifiers": [],
             "hosted_on": "h_a03",
-            "vm_id": "100",
+            "vm_id": {
+              "iv": "nnXZZxJUPt6ocRuR",
+              "ct": "MVfMtDTVv7FDJk3E2M+Wb8G6cQ=="
+            },
             "software": {
-              "name": "Home Assistant OS",
-              "version": "11.5",
+              "name": {
+                "iv": "zUujOp2A6ODfUmvU",
+                "ct": "raQKbWGcliWToaBTRj5+gtx4JCvyEn2haNKGHwsjrDdU"
+              },
+              "version": {
+                "iv": "u1mB3zgBq1ypF09G",
+                "ct": "4c5UP56lRzXlXGsLRdnVXG4MTK4="
+              },
               "kernel": "6.6.7",
               "edition": "",
               "notes": ""
@@ -2815,19 +3188,34 @@
             "model": "",
             "hardware_revision": "",
             "management_vlan": "v_a03",
-            "management_ip": "192.168.30.20",
+            "management_ip": {
+              "iv": "HRrv96PkY9wfydyw",
+              "ct": "gXhJUUMQjG1KGuJqaGxlGVL4loY71e0RcqCdpSs="
+            },
             "credential_ref": "c_a06",
             "interfaces": [
               {
-                "name": "eth0",
+                "name": {
+                  "iv": "p+ur519Vk917A17W",
+                  "ct": "9plkOzFLPfOQYhwbp60yTp7B8vQ="
+                },
                 "type": "virtual",
                 "mode": "access",
-                "mac": "52:54:00:11:22:33",
+                "mac": {
+                  "iv": "anvFGLLnW2+kSRcZ",
+                  "ct": "mlk5b990DkZfrSrEj0EzzT6uwsYtSQAfHmOWaj2XKbFE"
+                },
                 "parent": "",
                 "connected_to": {
                   "host_id": "h_a03",
-                  "interface": "vmbr0",
-                  "via_bridge": "vmbr0",
+                  "interface": {
+                    "iv": "v+31zTcGpm7sQOlm",
+                    "ct": "69JEInGTbcIGem2bQBrrv6w1ZM3N"
+                  },
+                  "via_bridge": {
+                    "iv": "kBFPW99yn2bMDBdk",
+                    "ct": "V5tY/z/drCdx+TGg3qxzGoTFlIr1"
+                  },
                   "via_tag": 30
                 },
                 "access_vlan": "v_a03",
@@ -2835,7 +3223,10 @@
                 "allowed_vlans": [],
                 "ip_addresses": [
                   {
-                    "address": "192.168.30.20",
+                    "address": {
+                      "iv": "PeEQHJfvOiNR2lE2",
+                      "ct": "PeadQdOUmCUnKn9QhGMrhcwhRqgHT/Uo9eKsDIE="
+                    },
                     "prefix": 24
                   }
                 ]
@@ -2844,31 +3235,64 @@
             "services": [
               {
                 "id": "s_a05",
-                "name": "ha_web",
-                "display_name": "Home Assistant Web UI",
+                "name": {
+                  "iv": "3B12K+3q3NtKTY4Y",
+                  "ct": "+0PZZm1TWvcVmk0NxTd3/WSclYPPlg=="
+                },
+                "display_name": {
+                  "iv": "XEYU+9KTe/+okhCi",
+                  "ct": "B+HFaiilikCFpUq/SifLh5V3jp+PiDif9r2kQVJVpDS+D7fsqA=="
+                },
                 "category": "application",
                 "protocol": "https",
-                "listen_ip": "192.168.30.20",
-                "port": 8123,
-                "url": "https://ha.local:8123/",
+                "listen_ip": {
+                  "iv": "jQZwJZWYMmcBNeKY",
+                  "ct": "OjoJFDZcU40GHlMAiCHsXKZFFlj7gKbkvBndqLQ="
+                },
+                "port": {
+                  "iv": "FeKb5gA9YFNIdy2x",
+                  "ct": "3aTQ7QdSRVC/0prdzR4vhvMoV40="
+                },
+                "url": {
+                  "iv": "Nm6dqC/r+jDrSYCp",
+                  "ct": "0UNldCF23BRmCJVRwiuUtNMWDSf+JhhiskzbPjN0xoUYgGmc5YY="
+                },
                 "credential_ref": "c_a06"
               },
               {
                 "id": "s_a06",
-                "name": "mqtt",
-                "display_name": "MQTT Broker",
+                "name": {
+                  "iv": "C/uyHUoX+QwfUQmG",
+                  "ct": "RyjcL60LuUL8DV2OCSElfie5Os0="
+                },
+                "display_name": {
+                  "iv": "x/skm8nfwC+U8A05",
+                  "ct": "HaLaUntbEn3SInH2WsIYUnnO+//DkrgCiE5a"
+                },
                 "category": "infrastructure",
                 "protocol": "mqtt",
-                "listen_ip": "192.168.30.20",
-                "port": 1883,
+                "listen_ip": {
+                  "iv": "A60mMB3Tu79rF24n",
+                  "ct": "4xSvNF33qo7ZdbPjNGb9bcz7q7KqK07Il6sAUKE="
+                },
+                "port": {
+                  "iv": "gLPEafw0P/iHZlA9",
+                  "ct": "0kySmRCzMLQuh/csReIbgvA+gr0="
+                },
                 "url": "",
                 "credential_ref": "c_a07"
               }
             ],
             "links": [
               {
-                "label": "Cloud dashboard",
-                "url": "https://my.home-assistant.io/"
+                "label": {
+                  "iv": "ue/XvDAfXmVxGsZT",
+                  "ct": "gSzSBNQeSOcGTathfaXhc0kuwA19lix3Fq358hK1gg=="
+                },
+                "url": {
+                  "iv": "yKFUiGNvJeVA1l42",
+                  "ct": "WkZ5iHA/+WCnn9xmbdr2v4Yzp3Gthzz9oeau+nJ9Nv4JxBVe3B0Jh8cmeoiL"
+                }
               }
             ],
             "peripherals": []
@@ -2876,36 +3300,69 @@
           "h_a05": {
             "kind": "container",
             "role": "server",
-            "display_name": "Pi-hole",
-            "hostname": "pihole",
+            "display_name": {
+              "iv": "2mn1b09TNCUF/Fz0",
+              "ct": "1ngzm5kpSHGk+b+hK5mmw/GuvXt6elI="
+            },
+            "hostname": {
+              "iv": "iekDkDg2Jcw7pNqc",
+              "ct": "X6zj12cguEuw3a6FOQISL0Q2H73kiw=="
+            },
             "aliases": [],
             "identifiers": [],
             "hosted_on": "h_a03",
-            "vm_id": "200",
+            "vm_id": {
+              "iv": "0LTTIaTztwnzVpoW",
+              "ct": "GaAYHVM0hy89p/okPlqIefE34Q=="
+            },
             "software": {
-              "name": "Pi-hole",
-              "version": "5.18",
+              "name": {
+                "iv": "vzP2YEzveTcLYGS+",
+                "ct": "a4E32MddSUvhfnlF7O20mZgegNcSIZg="
+              },
+              "version": {
+                "iv": "My/Q3HTzI4zIL0T3",
+                "ct": "5QIbrlAwR4ctQXMvJjorqjfJOo0="
+              },
               "kernel": "",
               "edition": "Debian 12 bookworm",
-              "notes": "LXC container"
+              "notes": {
+                "iv": "Ui6qnVGcp9wZnqhV",
+                "ct": "OYhZLxsmuDPFeVgmRqAzh5y63D1wNvaK1kj67yU="
+              }
             },
             "manufacturer": "",
             "model": "",
             "hardware_revision": "",
             "management_vlan": "v_a04",
-            "management_ip": "192.168.100.30",
+            "management_ip": {
+              "iv": "VXq0I26bgPYp0iTf",
+              "ct": "1lf45TlE6DiafOELJOVmnTGJiuNQ883uGHx7Tk56"
+            },
             "credential_ref": "c_a08",
             "interfaces": [
               {
-                "name": "eth0",
+                "name": {
+                  "iv": "uTj91eWggxZ3FTtG",
+                  "ct": "f32s8I44DTq3KyRS7awR7CshcT8="
+                },
                 "type": "virtual",
                 "mode": "access",
-                "mac": "52:54:00:33:44:55",
+                "mac": {
+                  "iv": "vmc7cHosWPtgLaLm",
+                  "ct": "ifItuRQ0Ik0452YGoI4g0VjNhO4nMViRyu4knT95IMFe"
+                },
                 "parent": "",
                 "connected_to": {
                   "host_id": "h_a03",
-                  "interface": "vmbr0",
-                  "via_bridge": "vmbr0",
+                  "interface": {
+                    "iv": "zEn0cLl0/GgvqeEd",
+                    "ct": "sDW2ceFhND8VSrJu4r4z10PU3JxG"
+                  },
+                  "via_bridge": {
+                    "iv": "JyUYqUF9APp+9q4S",
+                    "ct": "INUsGHZGM/sLsTGd3u6aObuXnT1X"
+                  },
                   "via_tag": 100
                 },
                 "access_vlan": "v_a04",
@@ -2913,7 +3370,10 @@
                 "allowed_vlans": [],
                 "ip_addresses": [
                   {
-                    "address": "192.168.100.30",
+                    "address": {
+                      "iv": "T4wU0YOTPahmQ/bd",
+                      "ct": "y1cxhS6kCfKNLzgflahATLlSepfvIfG2EyhdOLR9"
+                    },
                     "prefix": 24
                   }
                 ]
@@ -2922,24 +3382,51 @@
             "services": [
               {
                 "id": "s_a07",
-                "name": "dns",
-                "display_name": "DNS",
+                "name": {
+                  "iv": "l6IxEJPDOe0FVTLs",
+                  "ct": "tNZHjE8GIPx5Wt+9FzemTnTiwQ=="
+                },
+                "display_name": {
+                  "iv": "U4aedsYsPoNwY7OE",
+                  "ct": "uF+CvpsQbvp03AhL95BxBt0UJA=="
+                },
                 "category": "infrastructure",
                 "protocol": "udp",
-                "listen_ip": "192.168.100.30",
-                "port": 53,
+                "listen_ip": {
+                  "iv": "UkTJdvC5yN1VX/Lj",
+                  "ct": "WWAhBvUogAoYsfh1ayOpH1CX/iDZhMyyWRh95++6"
+                },
+                "port": {
+                  "iv": "TxD0XyVG+PJSHO0D",
+                  "ct": "cquokyBE2Rls1cYkIKOcBcaT"
+                },
                 "url": "",
                 "credential_ref": ""
               },
               {
                 "id": "s_a08",
-                "name": "pihole_web",
-                "display_name": "Pi-hole Admin",
+                "name": {
+                  "iv": "2Atrjvuwhn5F8ogF",
+                  "ct": "8Dg5o04P+dAcK51ufbQWUqMSXeZsnWieQAY="
+                },
+                "display_name": {
+                  "iv": "Xp7fdIAV0ey5BnV+",
+                  "ct": "pVGfUEYbj0u0EtjHwjNHJAgY0j3j6J4i28WCOY4="
+                },
                 "category": "management",
                 "protocol": "http",
-                "listen_ip": "192.168.100.30",
-                "port": 80,
-                "url": "http://192.168.100.30/admin/",
+                "listen_ip": {
+                  "iv": "dC4sFm491Vmndi4X",
+                  "ct": "9I2BVgEAcbBazI1EuK9ds+6bDdbVOP29hKvqwxSK"
+                },
+                "port": {
+                  "iv": "hLnXY108JVflVDzp",
+                  "ct": "h2fXm1CC2euMZ5Ga/m/wgXbe"
+                },
+                "url": {
+                  "iv": "vYL7ULTHanR72/R1",
+                  "ct": "Op2UKcnGKGSZrnbPXr4iGwFvuc0SuPTIL0lM2BG+mNARZCSVCvcF7btjOC0="
+                },
                 "credential_ref": "c_a09"
               }
             ],
@@ -2949,51 +3436,90 @@
           "h_a06": {
             "kind": "other",
             "role": "iot",
-            "display_name": "Pixel 7 Pro",
-            "hostname": "pixel",
+            "display_name": {
+              "iv": "y/dCktFrrDznrbil",
+              "ct": "e9qknGqkCR9mfzrUMBU2cPr8+J+EYTh/CmJd"
+            },
+            "hostname": {
+              "iv": "2jZlMPXff9IC36B6",
+              "ct": "PNP6KILwE2r3EHMhnHfyutVQrw+f"
+            },
             "aliases": [],
             "identifiers": [
               {
                 "kind": "mac",
-                "value": "d4:3a:2c:a0:22:2b",
-                "label": "bluetooth"
+                "value": {
+                  "iv": "8bzwtI2lfYCgBGUr",
+                  "ct": "CznVkhIWXhnNcoFOxb++10E5YpM8IVYR8RFXvWBZOGBf"
+                },
+                "label": {
+                  "iv": "2NLPUuy5ZewseK4C",
+                  "ct": "L5gpmof6g+hUbl76pHpIDTtnr/Z4XxV7TA=="
+                }
               },
               {
                 "kind": "imei",
-                "value": "356938035643809",
+                "value": {
+                  "iv": "JyxgyQFHcsBREW0k",
+                  "ct": "r+hcF2QPJKiSZU5hweOfLGvVI+DvkeUTOIpnZyqqbw=="
+                },
                 "label": ""
               },
               {
                 "kind": "serial",
-                "value": "PX7-SN-9988",
+                "value": {
+                  "iv": "w1dWTpHbLM/QuFnp",
+                  "ct": "9QAcDdL3g2g7E0qvhGA5U/DqHsx16zTnNsS8"
+                },
                 "label": ""
               }
             ],
             "hosted_on": "",
             "vm_id": "",
             "software": {
-              "name": "Android",
-              "version": "14",
+              "name": {
+                "iv": "ZOr9+Bvi9bPknBPA",
+                "ct": "aJfdQT13VJggcuOG4IY2VxIBcfnh2P0="
+              },
+              "version": {
+                "iv": "LVAdU9Eo3bRxW95f",
+                "ct": "D4b2vW0G6NByPbHRYqzegNEf"
+              },
               "kernel": "",
               "edition": "",
               "notes": ""
             },
-            "manufacturer": "Google",
-            "model": "Pixel 7 Pro",
+            "manufacturer": {
+              "iv": "5serCp3h8Hwqqnsd",
+              "ct": "jgy5adHp47j3HmxUJpRmKc6+R9fe+g=="
+            },
+            "model": {
+              "iv": "Omx1atbi1Ppho4iZ",
+              "ct": "f2NhI21P2tXkdcmkZvepGvdCR7gl9Zs82Q3a"
+            },
             "hardware_revision": "",
             "management_vlan": "",
             "management_ip": "",
             "credential_ref": "",
             "interfaces": [
               {
-                "name": "wifi0",
+                "name": {
+                  "iv": "6HUwtwz6Zc2RnKFa",
+                  "ct": "KsIwpN8Foi46NRSc0lIgOAkwhlna"
+                },
                 "type": "wifi",
                 "mode": "access",
-                "mac": "d4:3a:2c:ab:29:0a",
+                "mac": {
+                  "iv": "PybQbyQjCU/XsQY9",
+                  "ct": "80Qnlp1W+uh0whaVyYvM3CZDlTdvEeW5DqCKiAWb73XD"
+                },
                 "parent": "",
                 "connected_to": {
                   "host_id": "h_a07",
-                  "interface": "wlan0",
+                  "interface": {
+                    "iv": "fHBR99VSQyU7yTRX",
+                    "ct": "K2vRTV4XFz175l1wK/jGmw0w0h2B"
+                  },
                   "via_bridge": "",
                   "via_tag": null
                 },
@@ -3002,16 +3528,25 @@
                 "allowed_vlans": [],
                 "ip_addresses": [
                   {
-                    "address": "192.168.10.55",
+                    "address": {
+                      "iv": "WZ0NzpVm4v8D+5Vo",
+                      "ct": "sYIgER0tXXxbImrExVl2e5/TdJP4Bz1eq5cike8="
+                    },
                     "prefix": 24
                   }
                 ]
               },
               {
-                "name": "bt0",
+                "name": {
+                  "iv": "4WXBARb5ZoISaKsh",
+                  "ct": "uiOT+Q4tRTYLKy5/q2d5Q37meA=="
+                },
                 "type": "bluetooth",
                 "mode": "access",
-                "mac": "d4:3a:2c:a0:22:2b",
+                "mac": {
+                  "iv": "chycH42FWbV6iu89",
+                  "ct": "WE7hCz4J4E0iC2xTTNE9lLHq3fsj3mTXXpYaDKJLDZNW"
+                },
                 "parent": "",
                 "connected_to": {
                   "host_id": "",
@@ -3032,31 +3567,58 @@
           "h_a07": {
             "kind": "physical",
             "role": "access_point",
-            "display_name": "Access Point",
-            "hostname": "ap-01",
+            "display_name": {
+              "iv": "MWA/J8favrZ/NtZu",
+              "ct": "7oG4Bcw5G5GYmwnYTmfJ44jtgBSwGs3Zt62O4g=="
+            },
+            "hostname": {
+              "iv": "0CWFVSYadO/sQzFG",
+              "ct": "2BQdjKhDKb6ZDY4wRVvi023raVxV"
+            },
             "aliases": [],
             "identifiers": [],
             "hosted_on": "",
             "vm_id": "",
             "software": {
-              "name": "UniFi firmware",
-              "version": "6.5.59",
+              "name": {
+                "iv": "d1AKH9VWBL9k+Isz",
+                "ct": "Ao7CPzN8lxaKJ4dm7GGFLLTSSqQSrHllCvZDwo5q"
+              },
+              "version": {
+                "iv": "g2Ji81Oyq2Us4EGh",
+                "ct": "J99/qd2oFXl47hxm+wOMGv3Lq9rA+g=="
+              },
               "kernel": "",
               "edition": "",
               "notes": ""
             },
-            "manufacturer": "Ubiquiti",
-            "model": "U6-Lite",
+            "manufacturer": {
+              "iv": "kcFVxtF4MSy6kjFO",
+              "ct": "a9IW1sW6AJbYXgMBHZVJ12+T8tViP7Iy"
+            },
+            "model": {
+              "iv": "Nu4vSh3KNkTcpVWD",
+              "ct": "kquTW9cFijLFcm9Nk7904Z3qs0e+k4U="
+            },
             "hardware_revision": "",
             "management_vlan": "v_a04",
-            "management_ip": "192.168.100.3",
+            "management_ip": {
+              "iv": "TT5B5vqj94yBHxOw",
+              "ct": "jtSrYg9MCD3XkEvemS4O5oDscpC404i2cyGi9QM="
+            },
             "credential_ref": "c_a10",
             "interfaces": [
               {
-                "name": "wlan0",
+                "name": {
+                  "iv": "msnjOzon7/5hLuUW",
+                  "ct": "S0lso4C0v8i+oKczb219DaEYMs7v"
+                },
                 "type": "wifi",
                 "mode": "trunk",
-                "mac": "aa:bb:cc:22:22:01",
+                "mac": {
+                  "iv": "dzvqV5IitURStfgs",
+                  "ct": "7Kw4IiMyrseEdr2GvWJb/fQtbg72r6pE76dEYiafTVlE"
+                },
                 "parent": "",
                 "connected_to": {
                   "host_id": "",
@@ -3077,12 +3639,24 @@
             "services": [
               {
                 "id": "s_a09",
-                "name": "snmp",
-                "display_name": "SNMP",
+                "name": {
+                  "iv": "z7Uz0oxWREHNWsHf",
+                  "ct": "pdDVhhUo8z5ojlY/QlUP9cVbzcQ="
+                },
+                "display_name": {
+                  "iv": "esI7N1RefS8z9KdK",
+                  "ct": "f/oYE5jC/Gq8Rk1zI1ctgyjc/q4="
+                },
                 "category": "management",
                 "protocol": "snmp",
-                "listen_ip": "192.168.100.3",
-                "port": 161,
+                "listen_ip": {
+                  "iv": "x+l4V/xP2JJVKHe9",
+                  "ct": "vu/JRvKbr8JeUKAXRa3Vmim91IC5b+/z5dLQYPI="
+                },
+                "port": {
+                  "iv": "D6iMwgIvOhhe6PwV",
+                  "ct": "/fmDlMcBkCqNQsw0khxQ9dpL8Q=="
+                },
                 "url": "",
                 "credential_ref": "c_a11"
               }
@@ -3093,35 +3667,65 @@
           "h_a08": {
             "kind": "physical",
             "role": "storage",
-            "display_name": "NAS",
-            "hostname": "nas-01",
+            "display_name": {
+              "iv": "GvVGfhS26xoyW98r",
+              "ct": "dot96InMMtGojjSCe+ymE9/BvA=="
+            },
+            "hostname": {
+              "iv": "XK3bSQODVuI/YL/N",
+              "ct": "Ay501mZdpqXJI07X8FhW5RRGohZ1Qg=="
+            },
             "aliases": [],
             "identifiers": [],
             "hosted_on": "",
             "vm_id": "",
             "software": {
-              "name": "TrueNAS Scale",
-              "version": "23.10.1",
+              "name": {
+                "iv": "UVSRy7ri60jGf8bN",
+                "ct": "GzvxN7S1JYAKVZptv6fm52KobYEH/YhSGHcflSQ="
+              },
+              "version": {
+                "iv": "p/xn1k0ha3wu43L1",
+                "ct": "G5lLGMdPlyVs+wRbTHBPkfUj64rsPo0="
+              },
               "kernel": "6.1.55",
               "edition": "",
               "notes": ""
             },
-            "manufacturer": "Supermicro",
-            "model": "SuperServer 5028D",
+            "manufacturer": {
+              "iv": "bvQF3eli0UHGHXzK",
+              "ct": "7ugIB66dUyqu9UpeR53cTTyCIHffmnhH6M8="
+            },
+            "model": {
+              "iv": "KA8vPdZ3Apog1SCO",
+              "ct": "lFwTcu+h8wlxMeXEeKXKijPJ36TWZNiQfiSgaGfuwmLb"
+            },
             "hardware_revision": "",
             "management_vlan": "v_a04",
-            "management_ip": "192.168.100.40",
+            "management_ip": {
+              "iv": "RM2AqH3VoxqEMbmE",
+              "ct": "n626DvVusdT2hzZcPrWnX+wPtarCdyQ2Shp+wOQG"
+            },
             "credential_ref": "c_a12",
             "interfaces": [
               {
-                "name": "eth0",
+                "name": {
+                  "iv": "rAhY9Hpvch9V4mss",
+                  "ct": "BIWILWMgRn2lHeemSsVriJ3WHis="
+                },
                 "type": "ethernet",
                 "mode": "access",
-                "mac": "aa:bb:cc:33:33:01",
+                "mac": {
+                  "iv": "OV1exrZP1BVDFdod",
+                  "ct": "ynH2teGURrCXWnLK8x83DtswoHB4ZTM7WOW0JFk9Qa93"
+                },
                 "parent": "",
                 "connected_to": {
                   "host_id": "h_a02",
-                  "interface": "port_02",
+                  "interface": {
+                    "iv": "rXiRCW59W6PO4ofB",
+                    "ct": "NxUnPYx0SNrRl0FzllYv6yBnfEiR5FI="
+                  },
                   "via_bridge": "",
                   "via_tag": null
                 },
@@ -3130,7 +3734,10 @@
                 "allowed_vlans": [],
                 "ip_addresses": [
                   {
-                    "address": "192.168.100.40",
+                    "address": {
+                      "iv": "A+vh8RZe5SsznIGq",
+                      "ct": "Ff10C/qVrmquEvgQp/ZzeNF++VgqAYDva/u33zeT"
+                    },
                     "prefix": 24
                   }
                 ]
@@ -3139,34 +3746,70 @@
             "services": [
               {
                 "id": "s_a10",
-                "name": "smb",
-                "display_name": "SMB share",
+                "name": {
+                  "iv": "1WUZea9AqF/5Ek82",
+                  "ct": "zG1o/O9upw4RjlGZ6h+x9ImZfA=="
+                },
+                "display_name": {
+                  "iv": "EiBxOk/PD2EGh4tu",
+                  "ct": "a6KkPUEPBG1BrPyXm/SHDqk9ZV9odQw/YQ=="
+                },
                 "category": "application",
                 "protocol": "smb",
-                "listen_ip": "192.168.100.40",
-                "port": 445,
+                "listen_ip": {
+                  "iv": "AAMh/686tHA9xnJr",
+                  "ct": "rmhOfr6EbXhmyO4/Uf/y6E1SM+Xm+LRk/dETpXhZ"
+                },
+                "port": {
+                  "iv": "vdeCQ084n8+dcb5F",
+                  "ct": "i4z9Nh1PuuOPtkA+4YOrd6ePcg=="
+                },
                 "url": "",
                 "credential_ref": ""
               },
               {
                 "id": "s_a11",
-                "name": "rdp_jump",
-                "display_name": "RDP jump",
+                "name": {
+                  "iv": "niHkdKt5V0rkGFOT",
+                  "ct": "heeDgQn6Wb3jjK0UCS5pPB1sUxbMTJ9d"
+                },
+                "display_name": {
+                  "iv": "oDwAp8+Abcb++GkV",
+                  "ct": "QroMWfI/PSV9rxss0fW5WJqxnCSk+T6j"
+                },
                 "category": "other",
                 "protocol": "rdp",
-                "listen_ip": "192.168.100.40",
-                "port": 3389,
+                "listen_ip": {
+                  "iv": "a4W5Z1shfit2Mavv",
+                  "ct": "K1CWhvsRcDTPkTNBnIP86rxzf8/hphvuJK3LcHr3"
+                },
+                "port": {
+                  "iv": "axOuj7oIfItGvbyq",
+                  "ct": "UMoGrLChFc6avPP8u+vpXMB20a8="
+                },
                 "url": "",
                 "credential_ref": ""
               },
               {
                 "id": "s_a12",
-                "name": "tcp_misc",
-                "display_name": "Misc TCP",
+                "name": {
+                  "iv": "VoxJJNifgmqjCgTT",
+                  "ct": "fGzZyOQg9twjeQsSmWMfDs+SXM3C631B"
+                },
+                "display_name": {
+                  "iv": "6a4hXnFJ6/E8q8CP",
+                  "ct": "ZgkyOMhK5xIgufqaSjbNFa6YcmOozrwh"
+                },
                 "category": "other",
                 "protocol": "tcp",
-                "listen_ip": "192.168.100.40",
-                "port": 9000,
+                "listen_ip": {
+                  "iv": "qkArU/bIQdDOo1EM",
+                  "ct": "5MUY66RHLL7Hk3N+3BHKjJkyZkEqlIAVDqEothwg"
+                },
+                "port": {
+                  "iv": "NWQTIsCN+0j/1s4/",
+                  "ct": "DoZwSQ6vhBQ0FzUduptIYqVyN4w="
+                },
                 "url": "",
                 "credential_ref": ""
               }
@@ -3178,154 +3821,229 @@
         "credentials": {
           "c_a01": {
             "type": "web",
-            "username": "admin",
+            "username": {
+              "iv": "ym69pk0XGpPdr0+j",
+              "ct": "gdu+uZg3Ce/69SC/niwpf8JK5Bmf"
+            },
             "password": "",
             "external_ref": {
               "provider": "Bitwarden",
-              "id": "router-web-001"
+              "id": {
+                "iv": "q9XYv1ju9OvF43BQ",
+                "ct": "KkzLxJivjiNtFsfSAfCEATdFVOeQLV5I2S/lIFq6"
+              }
             },
-            "notes": "Router admin web UI"
+            "notes": {
+              "iv": "FAP/0n/O/MdIFqYb",
+              "ct": "nopsiaBndxnxMKDDZ19KaGyafBbfqdXW0O5USEsyFC21zpY="
+            }
           },
           "c_a02": {
             "type": "shell",
-            "username": "root",
+            "username": {
+              "iv": "nT1YJz1yOPnIi7LL",
+              "ct": "l1ZatQXxycE8dgbDPrnzn1xzWUY="
+            },
             "password": {
-              "iv": "rC3KOKl7XQRTuCFW",
-              "ct": "lsOvr7+uBWLCmcvFHZLT9jZ/xV57xXHeZi9Ap27A"
+              "iv": "aC5KCm/Jk04Ez4nT",
+              "ct": "b3TOQvYQKZksOdM79MsYL56BeefikAOfwIRl1Spb"
             },
             "external_ref": {
               "provider": "Bitwarden",
-              "id": "router-shell-002"
+              "id": {
+                "iv": "GIIrSBu6dCdv2C0A",
+                "ct": "D/WSZu2Z9hbCn9pC5196k+DxcSJmocJVc9a41hLQaCM="
+              }
             },
             "notes": ""
           },
           "c_a03": {
             "type": "web",
-            "username": "admin",
+            "username": {
+              "iv": "O/0XSxq9L9bMW7LX",
+              "ct": "YnC5RwEjF8n0Do7gK9DI4cMZaVwW"
+            },
             "password": {
-              "iv": "nhapxt4Ovakfg6us",
-              "ct": "hMOojqbOShHfvOu0go4uLQROXYndl3xxp8+Bi3hy"
+              "iv": "BZGiJIgLan7Cq0jg",
+              "ct": "VwwMNkJwAbLSBNR0RfdEGkPmZio9X/OUNQPpZCXn"
             },
             "external_ref": {
               "provider": "1Password",
-              "id": "switch-web-003"
+              "id": {
+                "iv": "VFFUleGJ94TrXVqc",
+                "ct": "9TL/xi8AodkEmaCpGid2ihqwMNPzLZv3svax885L"
+              }
             },
             "notes": ""
           },
           "c_a04": {
             "type": "shell",
-            "username": "root",
+            "username": {
+              "iv": "CgK26VjjrBwgqyRp",
+              "ct": "1mkJEL5K7uweZpj2i2deQsN7RTY="
+            },
             "password": {
-              "iv": "ym3a3I5zT+mvs0xX",
-              "ct": "0WujmwUL5N8gqqO1lYw176v30gAbmqhYIb0amuGL"
+              "iv": "nKF7drPf0KDGZZLw",
+              "ct": "xvt/7LergwdBhZd7H5ZC4Flini4Z3nPY34PFPClh"
             },
             "external_ref": {
               "provider": "Bitwarden",
-              "id": "pve-shell-004"
+              "id": {
+                "iv": "CvHZ+7Yqh3xrT7fX",
+                "ct": "6SCnVb7egwInxcUGakxfaulXnmg0ad8pAHKlsiw="
+              }
             },
             "notes": ""
           },
           "c_a05": {
             "type": "web",
-            "username": "root@pam",
+            "username": {
+              "iv": "ykkyOWmlOjk8gMRi",
+              "ct": "UFa/Wzu6Vg41g0upnbt+YNk2Mp6vbem0"
+            },
             "password": {
-              "iv": "/AsmpkZimNjquCgo",
-              "ct": "wCxQgVH+Eg0k3pXYSWVLtjQP3758Pa8wm80ktFSz"
+              "iv": "4k2Q+hOKM2To7zfy",
+              "ct": "QIm+LMOZUJjWSvBBM5z5Sh76BY/4bEQiUxkuFZGd"
             },
             "external_ref": {
               "provider": "Bitwarden",
-              "id": "pve-web-005"
+              "id": {
+                "iv": "iiijkBzrZcvjDQ06",
+                "ct": "7zYHwgYhaxCC4Ob5lB/OZ3+SUv33mHSYIz8A"
+              }
             },
             "notes": ""
           },
           "c_a06": {
             "type": "web",
-            "username": "homeassistant",
+            "username": {
+              "iv": "B3cBxt8r9JXilqL7",
+              "ct": "YdseuebNTWtZINagsWLeZv0G/4Po3teQafJjLXM="
+            },
             "password": {
-              "iv": "tPUR5fq4dOIJYYgs",
-              "ct": "PEu8yf+/qBfB9XUfSYI0Tu72YyYBId5dQSLAXJGv"
+              "iv": "5h6k4ow/vKWNqeMs",
+              "ct": "nAmwclw3KYWViqwues67k/vnUmOkZ+E2VT8MB4va"
             },
             "external_ref": {
               "provider": "Bitwarden",
-              "id": "ha-web-006"
+              "id": {
+                "iv": "0eVov3bpsStvpq3J",
+                "ct": "Z88zHWn46F7lqaTZVgyw99jUQwqh1/P/Iag="
+              }
             },
             "notes": ""
           },
           "c_a07": {
             "type": "api",
-            "username": "mqtt-token",
+            "username": {
+              "iv": "ObRApb4UESTWHpsx",
+              "ct": "WtpEDFlZbY5++q9Ma75kwlkMvjSYMPa0p9k="
+            },
             "password": {
-              "iv": "vTY0shE3YGBVAU/n",
-              "ct": "n74kEqOytFI3NY6En4HTJrjVjy8DXhtsgSIux6xo"
+              "iv": "I0z+PKnRFWLcvoSP",
+              "ct": "ZN4vICpVIwxMxbAiVRg6YQJ+1jdL9BlCJFagYCIS"
             },
             "external_ref": {
               "provider": "Vault",
-              "id": "mqtt/api/007"
+              "id": {
+                "iv": "OJgM9KVE/RspwwCr",
+                "ct": "xR3xDOf1O9Mm9GyEi5IzerR1tVPq7MPA0uavWA=="
+              }
             },
             "notes": ""
           },
           "c_a08": {
             "type": "shell",
-            "username": "root",
+            "username": {
+              "iv": "sr4G/Z4tMdniD8VB",
+              "ct": "hfZPRnmJBYCBMlVgkbRBECnUgLg="
+            },
             "password": {
-              "iv": "fLVSchS5fgd8HztX",
-              "ct": "Yv51vpuz+WBDAnHpnZ9kmCCjxpKOc9Kxsrpwhaku"
+              "iv": "LbDZKjjAxfgpj6av",
+              "ct": "h9alclSnFA+Dyu9EJo8y+DmvLUmIZRJKaWBe6Pc3"
             },
             "external_ref": {
               "provider": "Bitwarden",
-              "id": "pihole-shell-008"
+              "id": {
+                "iv": "DIHSrMJes25lIEuK",
+                "ct": "prdhfbMe0PxNxfjFafqyqHgEufUWeVj3q64w2RG0O54="
+              }
             },
             "notes": ""
           },
           "c_a09": {
             "type": "web",
-            "username": "admin",
+            "username": {
+              "iv": "W2cDyDCw6+nkVDt/",
+              "ct": "65tnEXZ7zpi8mamnNmFrzvQvZyaX"
+            },
             "password": {
-              "iv": "Ndb/Q83akZCYurMA",
-              "ct": "hobclYQJRlNNo1k+nzIanbrzmoOlRscDjQqjHtt4"
+              "iv": "qw40vFnRYQHXVFzO",
+              "ct": "14YMhXERL6RQxuHoDK7Cfb9tpAZKhbHyNT6hsxYk"
             },
             "external_ref": {
               "provider": "Bitwarden",
-              "id": "pihole-web-009"
+              "id": {
+                "iv": "RBurqmU02ub+r++N",
+                "ct": "0F9s36MNwlz1MpHZOT495/imQR0Vbva0XhWvrsHw"
+              }
             },
             "notes": ""
           },
           "c_a10": {
             "type": "console",
-            "username": "admin",
+            "username": {
+              "iv": "lV86RqeBhE8szvj1",
+              "ct": "cXK6lHcVOx1ph7atcAGk+MIsnalq"
+            },
             "password": {
-              "iv": "+/Khyvr1xs41t4B2",
-              "ct": "Nbckc98jZ/3rJDp058vgLIk9gKd5tmPJK7WuJg+K"
+              "iv": "cAWd8G/L9VagMaAd",
+              "ct": "VYGI+w7csqJCEPl0D+QT310K+vzbIYmVRMc/Unqa"
             },
             "external_ref": {
               "provider": "1Password",
-              "id": "ap-console-010"
+              "id": {
+                "iv": "scr2HcOdyBpONHC/",
+                "ct": "mCCEwZQvnJfM0ER3TBT2ZEIZ5iPdLKFjluNNoPAg"
+              }
             },
             "notes": ""
           },
           "c_a11": {
             "type": "snmp",
-            "username": "public",
+            "username": {
+              "iv": "zyRekOlCrQ2Q74LK",
+              "ct": "1UygCbqkeSGYVyysh+pWI6lAE8b5CQ=="
+            },
             "password": {
-              "iv": "wezxqh0KK0NqAuGx",
-              "ct": "W01Lk7U8pkyVdUTcJchjd+3saHTk1+FpZB7KwJE7"
+              "iv": "FtE9fPwOpC3DWfbH",
+              "ct": "s5h2lo5DcZtUZ8DZAofEq1ONHrJTionxgrpaZf+w"
             },
             "external_ref": {
               "provider": "1Password",
-              "id": "ap-snmp-011"
+              "id": {
+                "iv": "kWeoYPYxNGceZZw4",
+                "ct": "FY61zKkJn5cgN0cwq9+gNp0EWUxKydUiAqxD"
+              }
             },
             "notes": ""
           },
           "c_a12": {
             "type": "database",
-            "username": "dbadmin",
+            "username": {
+              "iv": "Ks8r9NA+yJu3dK7t",
+              "ct": "+CY/F8rnqc3IMMN7IOkaoPSMb1uXwcg="
+            },
             "password": {
-              "iv": "UCzNiehoVwS78R2c",
-              "ct": "Q9UxvEeHDweuI4qAYK9CgfPLm4ioSQG/qgdUtfZD"
+              "iv": "6sZnRERJBXl+Nv8g",
+              "ct": "Ui0FSvkzg+j4/+QLJth/Jbpdoch9HPs5jXyDisxd"
             },
             "external_ref": {
               "provider": "Vault",
-              "id": "nas/db/012"
+              "id": {
+                "iv": "EvHu89pYeS0alAk1",
+                "ct": "vx0S9wifY+v2QgqHQtGNUlcsMefCN2r4m8k="
+              }
             },
             "notes": ""
           },
@@ -3333,14 +4051,20 @@
             "type": "other",
             "username": "",
             "password": {
-              "iv": "dUWrVDSJdEdrMSVK",
-              "ct": "lKEmvooc3G+PtR1bP4F7nqQALbnTImM+9SNLcixZ"
+              "iv": "VnsFpYvqT25vN5u7",
+              "ct": "MLvby6hv6PQGutUXHl5zfeA5omDMihxtbl//k939"
             },
             "external_ref": {
               "provider": "KeePass",
-              "id": "misc-013"
+              "id": {
+                "iv": "3FVsCPlSkV4izjmv",
+                "ct": "++QlBM2dvRtvcUgffM8/sCk/HJjypNeZ"
+              }
             },
-            "notes": "Free-floating credential"
+            "notes": {
+              "iv": "RtnRtfbO/Q11Oajv",
+              "ct": "FvkOy+KcUQl3eT+hJBdiQfAsUJkat9WjiSCANNZ86J3F3LfWSW2Isw=="
+            }
           }
         }
       }
@@ -3616,6 +4340,81 @@ function hasEncryptedBlobs(d) {
     }
   }
   return false;
+}
+
+function walkAllBlobs(node, fn) {
+  if (Crypto.isEncryptedBlob(node)) { fn(node); return; }
+  if (node && typeof node === "object") {
+    if (Array.isArray(node)) {
+      for (const v of node) walkAllBlobs(v, fn);
+    } else {
+      for (const v of Object.values(node)) walkAllBlobs(v, fn);
+    }
+  }
+}
+
+function hasTier2Encryption(envelope) {
+  const fields = envelope?.encrypted_fields;
+  if (!Array.isArray(fields)) return false;
+  return fields.some(p => p && p !== "credentials.*.password");
+}
+
+async function decryptAllBlobs(d) {
+  const tasks = [];
+  walkAllBlobs(d, (blob) => {
+    tasks.push(Crypto.decryptField(blob, blob.iv));
+  });
+  await Promise.all(tasks);
+}
+
+function displayValue(v) {
+  if (typeof v === "string") return v;
+  if (Crypto.isEncryptedBlob(v)) {
+    const pt = Crypto.peek(v.iv);
+    return pt != null ? pt : "••••••";
+  }
+  return v == null ? "" : String(v);
+}
+
+async function tier2Write(plaintext) {
+  if (plaintext == null || plaintext === "" || !Crypto.isEncryptedSession()) return plaintext;
+  return await Crypto.encryptField(String(plaintext));
+}
+
+function swapBlobsToPlaintexts(root) {
+  const undo = [];
+  const walk = (node, parent, key) => {
+    if (Crypto.isEncryptedBlob(node)) {
+      if (parent != null && key != null) {
+        const pt = Crypto.peek(node.iv);
+        undo.push([parent, key, node]);
+        parent[key] = pt != null ? pt : "••••••";
+      }
+      return;
+    }
+    if (node && typeof node === "object") {
+      if (Array.isArray(node)) {
+        for (let i = 0; i < node.length; i++) walk(node[i], node, i);
+      } else {
+        for (const k of Object.keys(node)) walk(node[k], node, k);
+      }
+    }
+  };
+  walk(root, null, null);
+  return undo;
+}
+
+function restoreSwappedBlobs(undo) {
+  for (let i = undo.length - 1; i >= 0; i--) {
+    const [parent, key, blob] = undo[i];
+    parent[key] = blob;
+  }
+}
+
+function withDecryptedView(fn) {
+  if (!Crypto.isEncryptedSession() || !Crypto.isUnlocked()) return fn();
+  const undo = swapBlobsToPlaintexts(data);
+  try { return fn(); } finally { restoreSwappedBlobs(undo); }
 }
 
 function emptyConnectedTo() {
@@ -3935,6 +4734,15 @@ function normalizeNetwork(d) {
 
 function validateRefs(net) {
   if (!net) return [];
+  const undo = (Crypto.isEncryptedSession() && Crypto.isUnlocked()) ? swapBlobsToPlaintexts(net) : null;
+  try {
+    return validateRefsImpl(net);
+  } finally {
+    if (undo) restoreSwappedBlobs(undo);
+  }
+}
+
+function validateRefsImpl(net) {
   const rows = [];
   const vlanIds = new Set(Object.keys(net.vlans || {}));
   const hostIds = new Set(Object.keys(net.hosts || {}));
@@ -4017,9 +4825,12 @@ function switchNetwork(id) {
   switchTab("dashboard");
 }
 
-function createNetworkAndSwitch(name, description) {
+async function createNetworkAndSwitch(name, description) {
   const id = randomId("n", data.networks);
-  data.networks[id] = emptyNetwork(name.trim(), description.trim());
+  data.networks[id] = emptyNetwork(
+    await tier2Write(name.trim()),
+    await tier2Write(description.trim())
+  );
   data.activeNetworkId = id;
   state = data.networks[id];
   revealedCreds.clear();
@@ -4341,7 +5152,7 @@ function buildPopover() {
       <span class="check ${isCurrent ? "" : "is-empty"}" aria-hidden="true">
         <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
       </span>
-      <span class="label">${escapeHtml(net.network.name || id)}</span>
+      <span class="label">${escapeHtml(displayValue(net.network.name) || id)}</span>
       <span class="meta">${escapeHtml(networkSummary(net))}</span>
     `;
     btn.addEventListener("click", () => switchNetwork(id));
@@ -4405,11 +5216,11 @@ function openNewNetworkForm() {
     sub: "Start a fresh inventory with its own VLANs, hosts, and credentials",
     body,
     saveLabel: "Create network",
-    onSave: () => {
+    onSave: async () => {
       const name = $("#nn_name", body).value.trim();
       if (!name) { toast("Network name is required", "error"); return false; }
       const desc = $("#nn_desc", body).value.trim();
-      createNetworkAndSwitch(name, desc);
+      await createNetworkAndSwitch(name, desc);
     }
   });
 }
@@ -4429,12 +5240,14 @@ function openManageNetworksModal() {
       const row = document.createElement("div");
       row.className = "card tight";
       row.style.padding = "var(--space-3)";
+      const netName = displayValue(net.network.name);
+      const netDesc = displayValue(net.network.description);
       row.innerHTML = `
         <div style="display:flex; align-items:center; gap:var(--space-3); flex-wrap:wrap;">
           <div style="min-width:0; flex:1;">
-            <div style="font-weight:600; font-size:14px;">${escapeHtml(net.network.name || id)} ${isCurrent ? '<span class="chip accent" style="margin-left:var(--space-2);">current</span>' : ""}</div>
+            <div style="font-weight:600; font-size:14px;">${escapeHtml(netName || id)} ${isCurrent ? '<span class="chip accent" style="margin-left:var(--space-2);">current</span>' : ""}</div>
             <div class="muted" style="font-size:12px; font-family:var(--font-mono);">${escapeHtml(id)} · ${escapeHtml(networkSummary(net))}</div>
-            ${net.network.description ? `<div class="muted" style="font-size:12px; margin-top:4px;">${escapeHtml(net.network.description)}</div>` : ""}
+            ${netDesc ? `<div class="muted" style="font-size:12px; margin-top:4px;">${escapeHtml(netDesc)}</div>` : ""}
           </div>
           <div style="display:flex; gap:var(--space-1);">
             ${isCurrent ? "" : `<button type="button" class="btn sm" data-switch="${escapeHtml(id)}">Switch to</button>`}
@@ -4451,7 +5264,7 @@ function openManageNetworksModal() {
       if (del && !del.disabled) {
         del.addEventListener("click", () => {
           confirmDelete({
-            title: `Delete network '${net.network.name || id}'?`,
+            title: `Delete network '${displayValue(net.network.name) || id}'?`,
             message: `This permanently removes ${Object.keys(net.hosts).length} host(s), ${Object.keys(net.vlans).length} VLAN(s), and ${Object.keys(net.credentials).length} credential(s) in this network.`,
             onConfirm: () => {
               deleteNetwork(id);
@@ -4861,26 +5674,28 @@ function updateLockButtonVisibility() {
 }
 
 function render() {
-  updateLockButtonVisibility();
-  updateCounts();
-  $("#brand-title").textContent = state.network.name || "Untitled network";
-  const netCount = Object.keys(data.networks).length;
-  $("#brand-sub").textContent = netCount > 1
-    ? `${netCount} networks · tap to switch`
-    : networkSummary(state);
+  withDecryptedView(() => {
+    updateLockButtonVisibility();
+    updateCounts();
+    $("#brand-title").textContent = state.network.name || "Untitled network";
+    const netCount = Object.keys(data.networks).length;
+    $("#brand-sub").textContent = netCount > 1
+      ? `${netCount} networks · tap to switch`
+      : networkSummary(state);
 
-  const root = $("#content");
-  root.innerHTML = "";
-  if (activeTab === "dashboard") clearFiltersBar();
-  switch (activeTab) {
-    case "dashboard":   renderDashboard(root); break;
-    case "vlans":       renderVlans(root); break;
-    case "hosts":       renderHosts(root); break;
-    case "map":         renderMap(root); break;
-    case "interfaces":  renderInterfaces(root); break;
-    case "services":    renderServices(root); break;
-    case "credentials": renderCredentials(root); break;
-  }
+    const root = $("#content");
+    root.innerHTML = "";
+    if (activeTab === "dashboard") clearFiltersBar();
+    switch (activeTab) {
+      case "dashboard":   renderDashboard(root); break;
+      case "vlans":       renderVlans(root); break;
+      case "hosts":       renderHosts(root); break;
+      case "map":         renderMap(root); break;
+      case "interfaces":  renderInterfaces(root); break;
+      case "services":    renderServices(root); break;
+      case "credentials": renderCredentials(root); break;
+    }
+  });
 }
 
 let searchDebounceTimer = null;
@@ -5128,7 +5943,7 @@ function countVlanUsage(vlanId) {
 
 function openVlanForm(id = null) {
   const isEdit = !!id;
-  const v = isEdit ? clone(state.vlans[id]) : { name: "", tag: null, gateway_ip: "", subnet_prefix: null, dhcp: true, dhcp_range_start: "", dhcp_range_end: "" };
+  const v = isEdit ? withDecryptedView(() => clone(state.vlans[id])) : { name: "", tag: null, gateway_ip: "", subnet_prefix: null, dhcp: true, dhcp_range_start: "", dhcp_range_end: "" };
   const initialId = id || "";
 
   const body = document.createElement("div");
@@ -5205,7 +6020,7 @@ function openVlanForm(id = null) {
     sub: "Logical network segment",
     body,
     saveLabel: isEdit ? "Save changes" : "Create VLAN",
-    onSave: () => {
+    onSave: async () => {
       const name  = $("#vlan_name", body).value.trim();
       const tagRaw = $("#vlan_tag", body).value.trim();
       const gw    = $("#vlan_gw", body).value.trim();
@@ -5229,7 +6044,15 @@ function openVlanForm(id = null) {
       if ((rangeStart && !rangeEnd) || (!rangeStart && rangeEnd)) { toast("DHCP range needs both start and end addresses", "error"); return false; }
 
       const newId = isEdit ? id : randomId("v", state.vlans);
-      state.vlans[newId] = { name, tag, gateway_ip, subnet_prefix, dhcp, dhcp_range_start: rangeStart, dhcp_range_end: rangeEnd };
+      state.vlans[newId] = {
+        name: await tier2Write(name),
+        tag,
+        gateway_ip: await tier2Write(gateway_ip),
+        subnet_prefix,
+        dhcp,
+        dhcp_range_start: await tier2Write(rangeStart),
+        dhcp_range_end: await tier2Write(rangeEnd)
+      };
       saveState();
       render();
       toast(isEdit ? "VLAN updated" : "VLAN created", "success");
@@ -5545,6 +6368,10 @@ function hostDetailCard(id) {
 }
 
 function openHostForm(id = null) {
+  withDecryptedView(() => openHostFormBody(id));
+}
+
+function openHostFormBody(id) {
   const isEdit = !!id;
   const ep = isEdit ? clone(state.hosts[id]) : {
     kind: "physical", role: "other", display_name: "", hostname: "",
@@ -5728,7 +6555,7 @@ function openHostForm(id = null) {
     sub: "Physical device, virtual machine, or container on the network",
     body,
     saveLabel: isEdit ? "Save changes" : "Create host",
-    onSave: () => {
+    onSave: async () => {
       const dname    = $("#ep_dname", body).value.trim();
       const hostname = $("#ep_host", body).value.trim();
       const kind     = $("#ep_kind", body).value;
@@ -5759,21 +6586,38 @@ function openHostForm(id = null) {
       const next = isEdit ? state.hosts[id] : {};
       next.kind = kind;
       next.role = role;
-      next.display_name = dname;
-      next.hostname = hostname;
-      next.aliases = aliases;
+      next.display_name = await tier2Write(dname);
+      next.hostname = await tier2Write(hostname);
+      next.aliases = await Promise.all(aliases.map(a => tier2Write(a)));
       next.hosted_on = hostedOn;
-      next.vm_id = vmId;
-      next.software = { name: swName, version: swVersion, kernel: swKernel, edition: swEdition, notes: swNotes };
-      next.manufacturer = mfr;
-      next.model = model;
-      next.hardware_revision = hwRev;
+      next.vm_id = await tier2Write(vmId);
+      next.software = {
+        name: await tier2Write(swName),
+        version: await tier2Write(swVersion),
+        kernel: swKernel,
+        edition: swEdition,
+        notes: await tier2Write(swNotes)
+      };
+      next.manufacturer = await tier2Write(mfr);
+      next.model = await tier2Write(model);
+      next.hardware_revision = await tier2Write(hwRev);
       next.management_vlan = mvlan;
-      next.management_ip = mip;
+      next.management_ip = await tier2Write(mip);
       next.credential_ref = credRef;
-      next.links = links;
-      next.peripherals = peripherals;
-      next.identifiers = identifiers;
+      next.links = await Promise.all(links.map(async l => ({
+        label: await tier2Write(l.label),
+        url: await tier2Write(l.url)
+      })));
+      next.peripherals = await Promise.all(peripherals.map(async p => ({
+        ...p,
+        usb_vid_pid: await tier2Write(p.usb_vid_pid),
+        description: await tier2Write(p.description)
+      })));
+      next.identifiers = await Promise.all(identifiers.map(async i => ({
+        ...i,
+        value: await tier2Write(i.value),
+        label: await tier2Write(i.label)
+      })));
       if (!isEdit) {
         next.interfaces = [];
         next.services = [];
@@ -5790,7 +6634,7 @@ function openHostForm(id = null) {
 function deleteHost(id) {
   const ep = state.hosts[id];
   confirmDelete({
-    title: `Delete ${ep.display_name || id}`,
+    title: `Delete ${displayValue(ep.display_name) || id}`,
     message: `This will remove the host, its ${ep.interfaces.length} interface(s) and ${ep.services.length} service(s). This cannot be undone.`,
     onConfirm: () => {
       delete state.hosts[id];
@@ -5816,10 +6660,10 @@ function pickHostThen(thingLabel, formOpener) {
     return;
   }
   const body = document.createElement("div");
-  const opts = hostIds
+  const opts = withDecryptedView(() => hostIds
     .slice()
     .sort((a, b) => (state.hosts[a].display_name || a).localeCompare(state.hosts[b].display_name || b))
-    .map(id => ({ value: id, label: `${state.hosts[id].display_name || id}` + (state.hosts[id].display_name && state.hosts[id].display_name !== id ? ` · ${id}` : "") }));
+    .map(id => ({ value: id, label: `${state.hosts[id].display_name || id}` + (state.hosts[id].display_name && state.hosts[id].display_name !== id ? ` · ${id}` : "") })));
   body.appendChild(field({
     label: "Host",
     id: "pick_host",
@@ -5839,6 +6683,10 @@ function pickHostThen(thingLabel, formOpener) {
 }
 
 function openInterfaceForm(epId, idx = null) {
+  withDecryptedView(() => openInterfaceFormBody(epId, idx));
+}
+
+function openInterfaceFormBody(epId, idx) {
   const ep = state.hosts[epId];
   const isEdit = idx !== null && idx !== undefined;
   const i = isEdit ? clone(ep.interfaces[idx]) : {
@@ -5919,21 +6767,23 @@ function openInterfaceForm(epId, idx = null) {
   body.appendChild(connSection);
 
   function refreshConnIfaceOptions(preferredName) {
-    const hid = $("#if_conn_host", body).value;
-    const sel = $("#if_conn_iface", body);
-    const target = preferredName != null ? preferredName : sel.value;
-    if (!hid || !state.hosts[hid]) {
-      sel.innerHTML = `<option value="">—</option>`;
-      sel.disabled = true;
-      return;
-    }
-    sel.disabled = false;
-    const ifaces = (state.hosts[hid].interfaces || []).map(it => it.name).filter(Boolean);
-    const opts = [`<option value="">—</option>`];
-    ifaces.forEach(n => {
-      opts.push(`<option value="${escapeHtml(n)}"${n === target ? " selected" : ""}>${escapeHtml(n)}</option>`);
+    withDecryptedView(() => {
+      const hid = $("#if_conn_host", body).value;
+      const sel = $("#if_conn_iface", body);
+      const target = preferredName != null ? preferredName : sel.value;
+      if (!hid || !state.hosts[hid]) {
+        sel.innerHTML = `<option value="">—</option>`;
+        sel.disabled = true;
+        return;
+      }
+      sel.disabled = false;
+      const ifaces = (state.hosts[hid].interfaces || []).map(it => it.name).filter(Boolean);
+      const opts = [`<option value="">—</option>`];
+      ifaces.forEach(n => {
+        opts.push(`<option value="${escapeHtml(n)}"${n === target ? " selected" : ""}>${escapeHtml(n)}</option>`);
+      });
+      sel.innerHTML = opts.join("");
     });
-    sel.innerHTML = opts.join("");
   }
   refreshConnIfaceOptions(conn.interface || "");
   $("#if_conn_host", body).addEventListener("change", () => refreshConnIfaceOptions(""));
@@ -5986,11 +6836,11 @@ function openInterfaceForm(epId, idx = null) {
   body.appendChild(ipField);
 
   openModal({
-    title: isEdit ? `Edit interface · ${i.name || ""}` : `Add interface to ${ep.display_name || epId}`,
+    title: isEdit ? `Edit interface · ${i.name || ""}` : `Add interface to ${displayValue(ep.display_name) || epId}`,
     sub: "Network interface, port, or virtual NIC",
     body,
     saveLabel: isEdit ? "Save changes" : "Add interface",
-    onSave: () => {
+    onSave: async () => {
       const name = $("#if_name", body).value.trim();
       const type = $("#if_type", body).value;
       const mode = $("#if_mode", body).value;
@@ -6023,13 +6873,25 @@ function openInterfaceForm(epId, idx = null) {
       }
 
       const mac = $("#if_mac", body).value.trim();
+      const ipObjsEnc = await Promise.all(ipObjs.map(async o => ({
+        address: await tier2Write(o.address),
+        prefix: o.prefix
+      })));
       const result = {
-        name, type, mode, mac, parent,
-        connected_to: { host_id: connHost, interface: connIface, via_bridge: connBridge, via_tag: connTag },
+        name: await tier2Write(name),
+        type, mode,
+        mac: await tier2Write(mac),
+        parent: await tier2Write(parent),
+        connected_to: {
+          host_id: connHost,
+          interface: await tier2Write(connIface),
+          via_bridge: await tier2Write(connBridge),
+          via_tag: connTag
+        },
         access_vlan: "",
         native_vlan: "",
         allowed_vlans: [],
-        ip_addresses: ipObjs
+        ip_addresses: ipObjsEnc
       };
       if (mode === "access") {
         result.access_vlan = $("#if_avlan", body).value;
@@ -6054,10 +6916,10 @@ function openInterfaceForm(epId, idx = null) {
 
 function deleteInterface(epId, idx) {
   const ep = state.hosts[epId];
-  const name = ep.interfaces[idx]?.name || "interface";
+  const name = displayValue(ep.interfaces[idx]?.name) || "interface";
   confirmDelete({
     title: `Delete ${name}`,
-    message: `Remove interface '${name}' from ${ep.display_name || epId}?`,
+    message: `Remove interface '${name}' from ${displayValue(ep.display_name) || epId}?`,
     onConfirm: () => {
       ep.interfaces.splice(idx, 1);
       saveState();
@@ -6068,6 +6930,10 @@ function deleteInterface(epId, idx) {
 }
 
 function openServiceForm(epId, idx = null) {
+  withDecryptedView(() => openServiceFormBody(epId, idx));
+}
+
+function openServiceFormBody(epId, idx) {
   const ep = state.hosts[epId];
   const isEdit = idx !== null && idx !== undefined;
   const s = isEdit ? clone(ep.services[idx]) : {
@@ -6143,11 +7009,11 @@ function openServiceForm(epId, idx = null) {
   }));
 
   openModal({
-    title: isEdit ? `Edit service · ${s.name || ""}` : `Add service to ${ep.display_name || epId}`,
+    title: isEdit ? `Edit service · ${s.name || ""}` : `Add service to ${displayValue(ep.display_name) || epId}`,
     sub: "Network service exposed by this host",
     body,
     saveLabel: isEdit ? "Save changes" : "Add service",
-    onSave: () => {
+    onSave: async () => {
       const name  = $("#sv_name", body).value.trim();
       const dname = $("#sv_dname", body).value.trim();
       const proto = $("#sv_proto", body).value;
@@ -6177,8 +7043,14 @@ function openServiceForm(epId, idx = null) {
       const cat = $("#sv_cat", body).value;
       const newSvc = {
         id: useId,
-        name, display_name: dname, category: cat, protocol: proto,
-        listen_ip: lip, port, url, credential_ref: cred
+        name: await tier2Write(name),
+        display_name: await tier2Write(dname),
+        category: cat,
+        protocol: proto,
+        listen_ip: await tier2Write(lip),
+        port: await tier2Write(port),
+        url: await tier2Write(url),
+        credential_ref: cred
       };
       if (isEdit) ep.services[idx] = newSvc;
       else ep.services.push(newSvc);
@@ -6192,10 +7064,11 @@ function openServiceForm(epId, idx = null) {
 
 function deleteService(epId, idx) {
   const ep = state.hosts[epId];
-  const name = ep.services[idx]?.display_name || ep.services[idx]?.name || "service";
+  const svc = ep.services[idx];
+  const name = displayValue(svc?.display_name) || displayValue(svc?.name) || "service";
   confirmDelete({
     title: `Delete ${name}`,
-    message: `Remove service '${name}' from ${ep.display_name || epId}?`,
+    message: `Remove service '${name}' from ${displayValue(ep.display_name) || epId}?`,
     onConfirm: () => {
       ep.services.splice(idx, 1);
       saveState();
@@ -6607,7 +7480,7 @@ function findCredentialLinks(credId) {
 
 async function openCredentialForm(id = null) {
   const isEdit = !!id;
-  const c = isEdit ? clone(state.credentials[id]) : { type: "shell", username: "", password: "", external_ref: { provider: "", id: "" }, notes: "" };
+  const c = isEdit ? withDecryptedView(() => clone(state.credentials[id])) : { type: "shell", username: "", password: "", external_ref: { provider: "", id: "" }, notes: "" };
   if (isEdit && Crypto.isEncryptedBlob(c.password)) {
     if (!Crypto.isUnlocked()) {
       await promptUnlockForReveal();
@@ -6680,19 +7553,22 @@ async function openCredentialForm(id = null) {
     html: `<textarea id="cr_notes" rows="3" placeholder="Where used, rotation policy, etc.">${escapeHtml(c.notes || "")}</textarea>`
   }));
 
-  const hostItems = Object.keys(state.hosts).sort().map(hid => ({
+  const hostItems = withDecryptedView(() => Object.keys(state.hosts).sort().map(hid => ({
     value: hid,
     label: state.hosts[hid].display_name ? `${hid} · ${state.hosts[hid].display_name}` : hid
-  }));
-  const svcItems = [];
-  Object.keys(state.hosts).sort().forEach(hid => {
-    state.hosts[hid].services.forEach(s => {
-      if (!s.id) return;
-      const key = `${hid}:${s.id}`;
-      const display = s.display_name || s.name || s.id;
-      const label = display && display !== s.id ? `${key} · ${display}` : key;
-      svcItems.push({ value: key, label });
+  })));
+  const svcItems = withDecryptedView(() => {
+    const out = [];
+    Object.keys(state.hosts).sort().forEach(hid => {
+      state.hosts[hid].services.forEach(s => {
+        if (!s.id) return;
+        const key = `${hid}:${s.id}`;
+        const display = s.display_name || s.name || s.id;
+        const label = display && display !== s.id ? `${key} · ${display}` : key;
+        out.push({ value: key, label });
+      });
     });
+    return out;
   });
 
   const hostField = document.createElement("div");
@@ -6744,10 +7620,11 @@ async function openCredentialForm(id = null) {
         storedPassword = pass;
       }
       state.credentials[useId] = {
-        type, username: user,
+        type,
+        username: await tier2Write(user),
         password: storedPassword,
-        external_ref: { provider: refProvider, id: refId },
-        notes
+        external_ref: { provider: refProvider, id: await tier2Write(refId) },
+        notes: await tier2Write(notes)
       };
       if (Crypto.isEncryptedSession() && pass !== "") {
         Crypto.setCache(`${data.activeNetworkId}:${useId}`, pass);
@@ -7309,23 +8186,23 @@ function openNetworkForm() {
   body.appendChild(field({
     label: "Network name",
     id: "nw_name",
-    html: `<input id="nw_name" type="text" value="${escapeHtml(state.network.name || "")}" placeholder="Home Network" required>`
+    html: `<input id="nw_name" type="text" value="${escapeHtml(displayValue(state.network.name) || "")}" placeholder="Home Network" required>`
   }));
   body.appendChild(field({
     label: "Description",
     id: "nw_desc",
-    html: `<textarea id="nw_desc" rows="3" placeholder="Short description">${escapeHtml(state.network.description || "")}</textarea>`
+    html: `<textarea id="nw_desc" rows="3" placeholder="Short description">${escapeHtml(displayValue(state.network.description) || "")}</textarea>`
   }));
   openModal({
     title: "Edit network",
     sub: "Top-level metadata",
     body,
     saveLabel: "Save changes",
-    onSave: () => {
+    onSave: async () => {
       const name = $("#nw_name", body).value.trim();
       if (!name) { toast("Network name is required", "error"); return false; }
-      state.network.name = name;
-      state.network.description = $("#nw_desc", body).value.trim();
+      state.network.name = await tier2Write(name);
+      state.network.description = await tier2Write($("#nw_desc", body).value.trim());
       saveState();
       render();
       toast("Network details saved", "success");
@@ -7607,11 +8484,7 @@ function processImportedJson(parsed, onCommitted) {
       onUnlock: async (pp) => {
         try {
           await Crypto.unlock(pp, parsed.kdf);
-          const probe = findFirstBlob(parsed.data);
-          if (probe) {
-            await Crypto.decryptField(probe.blob, "__probe__");
-            Crypto.clearCache("__probe__");
-          }
+          await decryptAllBlobs(parsed.data);
           saveEnvelope({
             kdf: parsed.kdf,
             cipher: parsed.cipher,
@@ -7863,29 +8736,29 @@ async function runSelfTest() {
 
       let checked = 0;
       let mismatches = 0;
-      const encNetworks = envelope.data.networks || {};
-      const refNetworks = plaintextRef.networks || {};
-      for (const [nid, net] of Object.entries(encNetworks)) {
-        const refNet = refNetworks[nid];
-        if (!refNet) throw new Error(`encrypted fixture network ${nid} missing from plaintext reference`);
-        const encCreds = net.credentials || {};
-        const refCreds = refNet.credentials || {};
-        for (const [cid, cred] of Object.entries(encCreds)) {
-          const refCred = refCreds[cid];
-          if (!refCred) throw new Error(`encrypted fixture credential ${nid}/${cid} missing from plaintext reference`);
-          const blob = cred.password;
-          const expected = typeof refCred.password === "string" ? refCred.password : "";
-          if (!Crypto.isEncryptedBlob(blob)) {
-            if (blob !== expected) mismatches++;
-            continue;
-          }
-          const got = await Crypto.decryptField(blob, `__selftest:${nid}:${cid}`);
-          if (got !== expected) {
-            mismatches++;
-            console.warn(`[selftest] decrypted ${nid}/${cid} != plaintext reference`);
-          }
-          checked++;
+      const blobs = [];
+      const collect = (node, path) => {
+        if (Crypto.isEncryptedBlob(node)) { blobs.push({ path: path.slice(), blob: node }); return; }
+        if (node && typeof node === "object") {
+          if (Array.isArray(node)) for (let i = 0; i < node.length; i++) collect(node[i], path.concat(i));
+          else for (const k of Object.keys(node)) collect(node[k], path.concat(k));
         }
+      };
+      collect(envelope.data, []);
+      const getPath = (root, path) => {
+        let cur = root;
+        for (const k of path) { if (cur == null) return undefined; cur = cur[k]; }
+        return cur;
+      };
+      for (const { path, blob } of blobs) {
+        const got = await Crypto.decryptField(blob, `__selftest:${path.join(".")}`);
+        const expectedRaw = getPath(plaintextRef, path);
+        const expected = expectedRaw == null ? "" : String(expectedRaw);
+        if (got !== expected) {
+          mismatches++;
+          console.warn(`[selftest] decrypted ${path.join(".")} != plaintext reference`, { got, expected });
+        }
+        checked++;
       }
 
       Crypto.lock();
@@ -7955,6 +8828,51 @@ async function runSelfTest() {
   );
 }
 
+function setLocked(isLocked) {
+  document.body.classList.toggle("app-locked", !!isLocked);
+}
+
+function renderLockScreen(env) {
+  setLocked(true);
+  const content = document.getElementById("content");
+  content.innerHTML = `
+    <div class="lock-gate">
+      <div class="lock-gate-panel">
+        <h2>Locked</h2>
+        <p class="muted">This inventory is encrypted. Enter the passphrase to unlock.</p>
+        <input type="password" id="lock-pass" autocomplete="off" placeholder="Passphrase">
+        <div class="lock-error" id="lock-error" hidden></div>
+        <button class="btn primary" id="lock-unlock" type="button">Unlock</button>
+      </div>
+    </div>
+  `;
+  const passEl = document.getElementById("lock-pass");
+  const errEl = document.getElementById("lock-error");
+  const btn = document.getElementById("lock-unlock");
+  passEl.focus();
+  const tryUnlock = async () => {
+    const pp = passEl.value;
+    if (!pp) return;
+    btn.disabled = true; errEl.hidden = true;
+    try {
+      await Crypto.unlock(pp, env.kdf);
+      await decryptAllBlobs(data);
+      setLocked(false);
+      render();
+      reportDanglingRefs(validateAllNetworks(data));
+    } catch (err) {
+      Crypto.lock();
+      errEl.textContent = "Incorrect passphrase";
+      errEl.hidden = false;
+      passEl.focus(); passEl.select();
+    } finally {
+      btn.disabled = false;
+    }
+  };
+  btn.addEventListener("click", tryUnlock);
+  passEl.addEventListener("keydown", (e) => { if (e.key === "Enter") { e.preventDefault(); tryUnlock(); } });
+}
+
 function startApp() {
   if (hasEncryptedBlobs(data)) {
     const env = readEnvelopeFromStorage();
@@ -7965,6 +8883,10 @@ function startApp() {
       return;
     }
     lastKdf = env.kdf;
+    if (hasTier2Encryption(env)) {
+      renderLockScreen(env);
+      return;
+    }
     openPassphraseModal({
       onUnlock: async (pp) => {
         try {

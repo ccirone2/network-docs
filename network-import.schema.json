@@ -90,8 +90,8 @@
           "type": "object",
           "description": "Network-level metadata. Both fields default to empty string.",
           "properties": {
-            "name":        { "type": "string" },
-            "description": { "type": "string" }
+            "name":        { "$ref": "#/$defs/EncryptedString", "description": "Tier-2 encrypted." },
+            "description": { "$ref": "#/$defs/EncryptedString", "description": "Tier-2 encrypted." }
           }
         },
         "vlans": {
@@ -119,9 +119,9 @@
       "type": "object",
       "required": ["tag"],
       "properties": {
-        "name":             { "type": "string", "description": "Human-readable label, e.g. 'MAIN'." },
+        "name":             { "$ref": "#/$defs/EncryptedString", "description": "Human-readable label, e.g. 'MAIN'. Tier-2 encrypted." },
         "tag":              { "type": "integer", "minimum": 1, "maximum": 4094, "description": "802.1Q VLAN tag. Required and used for sort order." },
-        "gateway_ip":       { "type": "string", "format": "ipv4", "description": "Gateway IPv4 address (no prefix), e.g. '192.168.10.1'. Empty when there is no gateway." },
+        "gateway_ip":       { "$ref": "#/$defs/EncryptedString", "description": "Gateway IPv4 address (no prefix), e.g. '192.168.10.1'. Empty when there is no gateway. Tier-2 encrypted." },
         "subnet_prefix":    {
           "description": "Subnet prefix length (CIDR mask). Null/missing when there is no gateway or the prefix is unknown.",
           "anyOf": [
@@ -130,8 +130,8 @@
           ]
         },
         "dhcp":             { "type": "boolean", "description": "Whether DHCP is enabled on this VLAN." },
-        "dhcp_range_start": { "type": "string", "description": "First address of the DHCP pool (inclusive), e.g. '192.168.10.100'. Validated as an IPv4 address at edit time but not on import. Empty when unspecified or when dhcp is false." },
-        "dhcp_range_end":   { "type": "string", "description": "Last address of the DHCP pool (inclusive), e.g. '192.168.10.200'. Validated as an IPv4 address at edit time but not on import. Empty when unspecified or when dhcp is false." }
+        "dhcp_range_start": { "$ref": "#/$defs/EncryptedString", "description": "First address of the DHCP pool (inclusive), e.g. '192.168.10.100'. Empty when unspecified or when dhcp is false. Tier-2 encrypted." },
+        "dhcp_range_end":   { "$ref": "#/$defs/EncryptedString", "description": "Last address of the DHCP pool (inclusive), e.g. '192.168.10.200'. Empty when unspecified or when dhcp is false. Tier-2 encrypted." }
       }
     },
 
@@ -140,18 +140,18 @@
       "properties": {
         "kind":              { "$ref": "#/$defs/HostKind" },
         "role":              { "$ref": "#/$defs/HostRole" },
-        "display_name":      { "type": "string", "description": "Human-readable name. Should NOT include parenthetical disambiguators like '(VM 100 on bockscar)' — those are composed at render time from vm_id + hosted_on." },
-        "hostname":          { "type": "string" },
-        "aliases":           { "type": "array", "items": { "type": "string", "pattern": "^[^:]*$", "description": "Alternate hostnames only — no colons. Use identifiers[] for non-hostname IDs." } },
+        "display_name":      { "$ref": "#/$defs/EncryptedString", "description": "Human-readable name. Should NOT include parenthetical disambiguators like '(VM 100 on bockscar)' — those are composed at render time from vm_id + hosted_on. Tier-2 encrypted." },
+        "hostname":          { "$ref": "#/$defs/EncryptedString", "description": "Tier-2 encrypted." },
+        "aliases":           { "type": "array", "items": { "$ref": "#/$defs/EncryptedString", "description": "Alternate hostnames only — no colons. Use identifiers[] for non-hostname IDs. Tier-2 encrypted (per-element)." } },
         "identifiers":       { "type": "array", "items": { "$ref": "#/$defs/Identifier" }, "description": "Free-floating identifiers that don't belong to an interface (Bluetooth MACs, serial numbers, IMEIs, ...)." },
         "hosted_on":         { "type": "string", "description": "hostId of the parent host (typically used when kind = virtual or container)." },
-        "vm_id":             { "type": "string", "description": "Hypervisor-side VM/instance identifier (e.g. Proxmox VMID '100'). Stored as a string because the values in use are arbitrary tokens. Most meaningful when kind = 'virtual'; ignored otherwise." },
+        "vm_id":             { "$ref": "#/$defs/EncryptedString", "description": "Hypervisor-side VM/instance identifier (e.g. Proxmox VMID '100'). Stored as a string because the values in use are arbitrary tokens. Most meaningful when kind = 'virtual'; ignored otherwise. Tier-2 encrypted." },
         "software":          { "$ref": "#/$defs/Software" },
-        "manufacturer":      { "type": "string", "description": "Hardware vendor (e.g. 'Dell', 'Protectli', 'Google'). Combined with model at render time." },
-        "model":             { "type": "string", "description": "Product model name only — vendor lives in 'manufacturer'." },
-        "hardware_revision": { "type": "string", "description": "Optional revision/spin identifier (e.g. 'Rev A2', 'Backplate-5.26'). Stored only; not currently rendered." },
+        "manufacturer":      { "$ref": "#/$defs/EncryptedString", "description": "Hardware vendor (e.g. 'Dell', 'Protectli', 'Google'). Tier-2 encrypted." },
+        "model":             { "$ref": "#/$defs/EncryptedString", "description": "Product model name only — vendor lives in 'manufacturer'. Tier-2 encrypted." },
+        "hardware_revision": { "$ref": "#/$defs/EncryptedString", "description": "Optional revision/spin identifier (e.g. 'Rev A2'). Tier-2 encrypted." },
         "management_vlan":   { "type": "string", "description": "vlanId reference. Not enforced — dangling refs are tolerated." },
-        "management_ip":     { "type": "string", "format": "ipv4" },
+        "management_ip":     { "$ref": "#/$defs/EncryptedString", "description": "Tier-2 encrypted." },
         "credential_ref":    { "type": "string", "description": "credentialId reference. Not enforced — dangling refs are tolerated." },
         "interfaces":        { "type": "array", "items": { "$ref": "#/$defs/Interface" } },
         "services":          { "type": "array", "items": { "$ref": "#/$defs/Service" } },
@@ -164,22 +164,22 @@
       "type": "object",
       "description": "Structured software/firmware descriptor. The renderer composes a display string roughly as 'name (edition, version, kernel ...)'. For switches/APs use 'name' for the firmware family (e.g. 'GS308E firmware') and 'version' for the build number; software.name being empty hides the chip entirely.",
       "properties": {
-        "name":    { "type": "string", "description": "Primary name (e.g. 'Ubuntu', 'pfSense', 'GS308E firmware')." },
-        "version": { "type": "string", "description": "Version or build identifier (e.g. '24.04', 'V1.0.1.9')." },
+        "name":    { "$ref": "#/$defs/EncryptedString", "description": "Primary name (e.g. 'Ubuntu', 'pfSense', 'GS308E firmware'). Tier-2 encrypted." },
+        "version": { "$ref": "#/$defs/EncryptedString", "description": "Version or build identifier (e.g. '24.04', 'V1.0.1.9'). Tier-2 encrypted." },
         "kernel":  { "type": "string", "description": "Kernel version where applicable (e.g. '6.1.21-v8+'). Empty for firmware/appliance-style entries." },
         "edition": { "type": "string", "description": "Edition / spin / base distro (e.g. 'Community Edition', 'Debian 11 bullseye')." },
-        "notes":   { "type": "string" }
+        "notes":   { "$ref": "#/$defs/EncryptedString", "description": "Tier-2 encrypted." }
       }
     },
 
     "Interface": {
       "type": "object",
       "properties": {
-        "name":          { "type": "string" },
+        "name":          { "$ref": "#/$defs/EncryptedString", "description": "Interface name. Tier-2 encrypted because user-set names like 'radio_pancho' or 'wlan_HomeNet' can leak SSID/wireless info." },
         "type":          { "$ref": "#/$defs/InterfaceType" },
         "mode":          { "$ref": "#/$defs/InterfaceMode" },
-        "mac":           { "type": "string", "pattern": "^$|^[0-9a-fA-F]{2}(:[0-9a-fA-F]{2}){5}$", "description": "MAC address of this interface in colon-separated hex (e.g. 'aa:bb:cc:dd:ee:ff'). Empty string is allowed and means 'unset'. The loader does not enforce the pattern, but the schema rejects malformed non-empty values for external validators." },
-        "parent":        { "type": "string", "description": "Name of the parent interface (used for virtual/sub-interfaces)." },
+        "mac":           { "$ref": "#/$defs/EncryptedString", "description": "MAC address. Tier-2 encrypted." },
+        "parent":        { "$ref": "#/$defs/EncryptedString", "description": "Name of the parent interface (used for virtual/sub-interfaces). Tier-2 encrypted (mirror of `name`)." },
         "connected_to":  { "$ref": "#/$defs/ConnectedTo" },
         "access_vlan":   { "type": "string", "description": "vlanId for access mode. Empty when mode = trunk." },
         "native_vlan":   { "type": "string", "description": "vlanId for the native (untagged / PVID) VLAN on a trunk. Empty when mode = access, or when the trunk has no useful native VLAN." },
@@ -192,7 +192,7 @@
       "type": "object",
       "description": "An IPv4 address with optional prefix length. Form input still accepts the full 'a.b.c.d/m' string for ergonomics; it is parsed into { address, prefix } on save.",
       "properties": {
-        "address": { "type": "string", "format": "ipv4" },
+        "address": { "$ref": "#/$defs/EncryptedString", "description": "Tier-2 encrypted." },
         "prefix":  {
           "anyOf": [
             { "type": "integer", "minimum": 0, "maximum": 32 },
@@ -207,8 +207,8 @@
       "description": "Structured pointer to the remote endpoint of the cable/link. All sub-fields optional; missing or empty host_id means 'not connected'. via_bridge names a Linux bridge, OVS bridge, or virtual switch (e.g. Proxmox 'vmbr0'); via_tag is the 802.1Q tag the link delivers (1–4094) when relevant.",
       "properties": {
         "host_id":    { "type": "string", "description": "Remote hostId. Not enforced — dangling refs are tolerated." },
-        "interface":  { "type": "string", "description": "Remote interface name (must match a name on the remote host's interfaces)." },
-        "via_bridge": { "type": "string", "description": "Bridge or virtual switch carrying the link." },
+        "interface":  { "$ref": "#/$defs/EncryptedString", "description": "Remote interface name. Tier-2 encrypted to match the target interface's `name`." },
+        "via_bridge": { "$ref": "#/$defs/EncryptedString", "description": "Bridge or virtual switch carrying the link. Tier-2 encrypted (homelab bridge names can leak topology). " },
         "via_tag":    {
           "description": "VLAN tag the link delivers, when relevant. Null/missing if not applicable.",
           "anyOf": [
@@ -223,20 +223,21 @@
       "type": "object",
       "required": ["id"],
       "properties": {
-        "id":             { "$ref": "#/$defs/IdString", "description": "Stable per-host identifier for the service. Generated by slugify(name) with collision suffix on import; readonly in the edit form. Allows other records (e.g. credentials) to refer to a service even when its name changes." },
-        "name":           { "type": "string" },
-        "display_name":   { "type": "string" },
+        "id":             { "$ref": "#/$defs/IdString", "description": "Stable per-host identifier for the service. Allows other records (e.g. credentials) to refer to a service even when its name changes." },
+        "name":           { "$ref": "#/$defs/EncryptedString", "description": "Tier-2 encrypted." },
+        "display_name":   { "$ref": "#/$defs/EncryptedString", "description": "Tier-2 encrypted." },
         "category":       { "$ref": "#/$defs/ServiceCategory" },
         "protocol":       { "$ref": "#/$defs/ServiceProtocol" },
-        "listen_ip":      { "type": "string", "format": "ipv4" },
+        "listen_ip":      { "$ref": "#/$defs/EncryptedString", "description": "Tier-2 encrypted." },
         "port":           {
-          "description": "Port number. Stored as either a number or a string (the form input is text). Empty string = unspecified.",
+          "description": "Port number. Stored as int, string, or EncryptedBlob. Tier-2 encrypted; integer ports are stringified before encryption and round-trip as strings (the int|string union accepts both).",
           "anyOf": [
             { "type": "integer", "minimum": 0, "maximum": 65535 },
-            { "type": "string" }
+            { "type": "string" },
+            { "$ref": "#/$defs/EncryptedBlob" }
           ]
         },
-        "url":            { "type": "string" },
+        "url":            { "$ref": "#/$defs/EncryptedString", "description": "Tier-2 encrypted." },
         "credential_ref": { "type": "string" }
       }
     },
@@ -245,8 +246,8 @@
       "type": "object",
       "description": "A labeled external URL on a host. Use for vendor portals, cloud dashboards, or doc links — anything reachable from a browser that isn't a service running on the host. The label is what the UI renders; the URL is opened on click.",
       "properties": {
-        "label": { "type": "string", "description": "Human-readable name for the link (e.g. 'Nest cloud', 'Vendor docs')." },
-        "url":   { "type": "string", "description": "Full URL including scheme. Not validated on import." }
+        "label": { "$ref": "#/$defs/EncryptedString", "description": "Tier-2 encrypted." },
+        "url":   { "$ref": "#/$defs/EncryptedString", "description": "Tier-2 encrypted." }
       }
     },
 
@@ -255,8 +256,8 @@
       "description": "A physical peripheral attached to or passed through to this host. Slot is the host-side index; usb_vid_pid is the USB vendor:product ID; description is free-form (vendor / product / role).",
       "properties": {
         "slot":        { "type": "string", "description": "Bare slot identifier (e.g. '0', '1', '2'). Do NOT include the kind prefix — that's redundant with `kind`." },
-        "usb_vid_pid": { "type": "string", "pattern": "^[0-9a-fA-F]{4}:[0-9a-fA-F]{4}$", "description": "USB vendor:product ID in lsusb format (e.g. '1d6b:0002'). Only meaningful when `kind` is `usb`." },
-        "description": { "type": "string", "description": "Human-readable description (vendor, model, role)." },
+        "usb_vid_pid": { "$ref": "#/$defs/EncryptedString", "description": "USB vendor:product ID in lsusb format (e.g. '1d6b:0002'). Tier-2 encrypted." },
+        "description": { "$ref": "#/$defs/EncryptedString", "description": "Tier-2 encrypted." },
         "kind":        { "$ref": "#/$defs/PeripheralKind" }
       }
     },
@@ -267,8 +268,8 @@
       "required": ["kind", "value"],
       "properties": {
         "kind":  { "$ref": "#/$defs/IdentifierKind" },
-        "value": { "type": "string", "description": "The identifier value (e.g. a MAC address, serial number, IMEI)." },
-        "label": { "type": "string", "description": "Optional human-readable label shown instead of kind in the chip (e.g. 'bluetooth')." }
+        "value": { "$ref": "#/$defs/EncryptedString", "description": "Tier-2 encrypted." },
+        "label": { "$ref": "#/$defs/EncryptedString", "description": "Tier-2 encrypted." }
       }
     },
 
@@ -277,7 +278,7 @@
       "description": "Plaintext password storage is supported but discouraged; external_ref is the intended field for pointing at an external vault entry. It carries a provider name (e.g. 'Bitwarden', '1Password') and a provider-scoped id (vault item id, path, etc.) — rendered as 'provider: id'. The reverse linkage to hosts/services is NOT stored on the credential — it is derived from host.credential_ref / service.credential_ref. The credential edit modal exposes that reverse view for convenience and writes back to the host/service side on save.",
       "properties": {
         "type":         { "$ref": "#/$defs/CredentialType" },
-        "username":     { "type": "string" },
+        "username":     { "$ref": "#/$defs/EncryptedString", "description": "Tier-2 encrypted." },
         "password":     {
           "description": "Plaintext password OR per-value encrypted blob. When the file is loaded from an encrypted envelope, this field carries the {iv, ct} shape and is decrypted on demand. When the file is plaintext, OR the field has been re-saved in a plaintext session, OR an empty password was set in an encrypted session (the empty string is not a secret — never encrypted), this is a plain string. When a non-empty password is created or edited in an unlocked encrypted session, the in-app save handler re-encrypts it with a fresh IV before assigning, so the field flips back to the {iv, ct} shape. The loader accepts either; unknown shapes collapse to empty string. Mixed states inside one credentials map (some entries plaintext, some blobs) are explicitly supported and round-trip through Import/Export.",
           "oneOf": [
@@ -290,10 +291,10 @@
           "description": "Pointer to an external secret store. Both fields optional; provider is the vault/manager name, id is the provider-scoped identifier (e.g. Bitwarden item id, vault path). Display format is '${provider}: ${id}' when both are present.",
           "properties": {
             "provider": { "type": "string" },
-            "id":       { "type": "string" }
+            "id":       { "$ref": "#/$defs/EncryptedString", "description": "Tier-2 encrypted." }
           }
         },
-        "notes":        { "type": "string" }
+        "notes":        { "$ref": "#/$defs/EncryptedString", "description": "Tier-2 encrypted." }
       }
     },
 
@@ -305,6 +306,14 @@
         "iv": { "type": "string", "description": "Base64-encoded AES-GCM IV (nonce)." },
         "ct": { "type": "string", "description": "Base64-encoded AES-GCM ciphertext + auth tag." }
       }
+    },
+
+    "EncryptedString": {
+      "description": "A Tier-2 field — accepts either a plaintext string or an EncryptedBlob. Format/pattern constraints (e.g. ipv4, MAC) only apply to the string branch; encrypted blobs are validated structurally. Fields using this $def are listed in the encrypted envelope's `encrypted_fields` array when the file is encrypted with the helper's --tier2 mode.",
+      "oneOf": [
+        { "type": "string" },
+        { "$ref": "#/$defs/EncryptedBlob" }
+      ]
     },
 
     "IdString": {
